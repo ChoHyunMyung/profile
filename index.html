@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>퍼스널 프로파일</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="프로파일">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1f3f8f">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap">
+<style>
+html,body{margin:0}
+
+/* Layout: one column, 60 statements as a vertical sheet, sticky progress bar, result replaces the sheet */
+:root{
+  --bg:#f6f5f1; --paper:#ffffff; --fg:#1b1d24; --muted:#6a6e7a; --line:#d9d8d1;
+  --accent:#1f3f8f; --accent-fg:#ffffff; --soft:#e7ecf8; --warn:#b8422a;
+  --gd:#c0392b; --ga:#2f5ea8; --gi:#2e8b57;
+  --display:"Noto Serif KR",serif; --body:"Noto Sans KR",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14161c; --paper:#1d2029; --fg:#eceef3; --muted:#9aa0ae; --line:#333744;
+  --accent:#8fa8e8; --accent-fg:#0f1420; --soft:#242b3d; --warn:#e58a70;
+  --gd:#e06a5c; --ga:#78a3f0; --gi:#5ec28a; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#14161c; --paper:#1d2029; --fg:#eceef3; --muted:#9aa0ae; --line:#333744;
+  --accent:#8fa8e8; --accent-fg:#0f1420; --soft:#242b3d; --warn:#e58a70;
+  --gd:#e06a5c; --ga:#78a3f0; --gi:#5ec28a; color-scheme:dark }
+
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+*{box-sizing:border-box}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-family:var(--display);font-size:1.9rem;line-height:1.25;margin:28px 0 6px;text-wrap:balance}
+.lead{color:var(--muted);margin:0 0 20px;font-size:.98rem}
+.rule{font-size:.95rem;background:var(--soft);padding:12px 14px;border-radius:6px;margin-bottom:18px}
+.rule b{color:var(--accent)}
+label.f{display:block;font-size:.8rem;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.fields input,.fields select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--fg)}
+.sticky{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:12px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.prog{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+
+.item{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin-bottom:12px;overflow:hidden}
+.item.err{border-color:var(--warn)}
+.item.done{border-color:var(--accent)}
+.item .q{display:flex;gap:10px;padding:12px 14px 10px;font-weight:500}
+.item .q b{font-family:var(--display);color:var(--muted);min-width:1.8em;font-variant-numeric:tabular-nums}
+.item .q span{min-width:0}
+.opts{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line)}
+.opts label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;cursor:pointer;
+  font-size:.74rem;line-height:1.2;color:var(--muted);text-align:center;border-left:1px solid var(--line);position:relative}
+.opts label:first-child{border-left:0}
+.opts input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opts label em{font-style:normal;font-weight:700;font-size:1.05rem;color:var(--fg)}
+.opts label:has(input:checked){background:var(--accent);color:var(--accent-fg)}
+.opts label:has(input:checked) em{color:var(--accent-fg)}
+.opts label:has(input:focus-visible){outline:3px solid var(--gd);outline-offset:-3px}
+
+.btn{display:block;width:100%;font:inherit;font-weight:700;font-size:1.1rem;padding:16px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-fg);cursor:pointer;margin-top:10px}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn:focus-visible{outline:3px solid var(--gd);outline-offset:2px}
+.msg{color:var(--warn);font-weight:700;margin-top:10px;min-height:1.4em}
+
+.res h2{font-family:var(--display);font-size:1.4rem;margin:26px 0 10px}
+.res h3{font-size:1.05rem;margin:22px 0 8px}
+.hero{background:var(--accent);color:var(--accent-fg);border-radius:10px;padding:20px 20px 16px;margin-bottom:12px}
+.hero .tag{font-size:.78rem;letter-spacing:.08em;opacity:.85}
+.hero .type{font-family:var(--display);font-size:2.6rem;line-height:1.1;margin:4px 0 6px}
+.hero p{margin:0 0 8px}
+.hero .kw{font-weight:700;opacity:.9}
+.flag{border:1px solid var(--warn);color:var(--warn);border-radius:8px;padding:12px 14px;margin-bottom:12px;font-weight:500}
+.grp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grp div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 10px;text-align:center}
+.grp b{display:block;font-family:var(--display);font-size:1.6rem;font-variant-numeric:tabular-nums}
+.grp span{font-size:.85rem;color:var(--muted)}
+.bars{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px 14px}
+.brow{display:grid;grid-template-columns:7.2em 1fr 4.6em;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.brow:last-child{border-bottom:0}
+.brow .nm{font-weight:700;min-width:0}
+.brow .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.brow .tr i{display:block;height:100%;border-radius:5px}
+.brow .sc{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.88rem}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin:8px 0 0}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.desc{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:10px}
+.desc h4{margin:0 0 4px;font-size:1.02rem}
+.desc p{margin:0 0 6px}
+.desc .act{color:var(--accent);font-weight:500}
+.note{font-size:.86rem;color:var(--muted);margin-top:18px}
+textarea.fb{width:100%;font:inherit;font-size:.9rem;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--fg)}
+@media (max-width:420px){ body{font-size:16px} .fields{grid-template-columns:1fr} .hero .type{font-size:2.1rem} .brow{grid-template-columns:6.4em 1fr 4.2em;gap:8px} .opts label{font-size:.68rem} }
+@media (prefers-reduced-motion:reduce){ .bar i{transition:none} }
+
+[hidden]{display:none!important}
+body{padding-top:env(safe-area-inset-top,0px);padding-bottom:max(48px,env(safe-area-inset-bottom,0px))}
+.home{min-height:70vh;display:flex;flex-direction:column;justify-content:center}
+.home h1{font-size:2.4rem}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 18px;margin-top:20px}
+.card h2{font-family:var(--display);font-size:1.5rem;margin:0 0 8px}
+.pin{width:100%;font:inherit;font-size:1.6rem;letter-spacing:.5em;text-align:center;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--fg);-webkit-text-security:disc;margin-bottom:10px}
+.link{display:block;width:100%;background:none;border:0;font:inherit;font-size:.9rem;color:var(--muted);text-decoration:underline;padding:14px;cursor:pointer;margin-top:8px}
+.row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;width:100%;text-align:left;font:inherit;color:var(--fg);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
+.row b{font-size:1.1rem}
+.row span{color:var(--muted);font-size:.9rem}
+.row em{font-style:normal;font-weight:700;color:var(--accent);grid-row:span 2;align-self:center}
+textarea.code{width:100%;font:inherit;font-size:.9rem;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--fg);word-break:break-all}
+.btn.danger{background:transparent;color:var(--warn);border:1px solid var(--warn)}
+.seven{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px}
+.seven div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 2px;text-align:center;min-width:0}
+.seven b{display:block;font-family:var(--display);font-size:1.5rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.seven span{font-size:.72rem;color:var(--muted);word-break:keep-all;line-height:1.25;display:block}
+.seven .zero b{color:var(--line)}
+.gh{font-size:1.05rem;margin:20px 0 8px}
+.row em{font-size:.85rem;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.seven{grid-template-columns:repeat(4,1fr)}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="v-setup" hidden>
+    <h1>처음 설정</h1>
+    <p class="lead">지점장 전용 화면입니다. 결과를 볼 때 쓸 숫자 비밀번호 4자리를 정합니다.</p>
+    <label class="f" for="p1">비밀번호 4자리</label>
+    <input class="pin" id="p1" type="tel" inputmode="numeric" maxlength="4" autocomplete="off">
+    <label class="f" for="p2">한 번 더</label>
+    <input class="pin" id="p2" type="tel" inputmode="numeric" maxlength="4" autocomplete="off">
+    <div class="msg" id="m-setup"></div>
+    <button class="btn" id="b-setup">정하기</button>
+    <p class="note">비밀번호와 검사 결과는 이 기기 안에만 저장됩니다. 다른 곳으로 보내지지 않습니다.</p>
+  </section>
+
+  <section id="v-home" class="home" hidden>
+    <h1>퍼스널 프로파일 검사</h1>
+    <p class="lead">MetLife 울산지점 후보자용. 문장 60개, 약 10분.</p>
+    <button class="btn" id="b-start">검사 시작</button>
+    <button class="link" id="b-admin">결과 보기 (지점장)</button>
+    <p class="note">보험업법상 보험설계사를 모집하는 것으로 정규 또는 비정규 직원 채용과는 무관합니다.</p>
+  </section>
+
+  <section id="v-test" hidden>
+    <h1>퍼스널 프로파일 검사</h1>
+    <div class="rule">문장을 읽고 <b>평소의 나와 얼마나 같은지</b> 다섯 가지 답 가운데 하나를 고릅니다. 정답은 없습니다. 되고 싶은 모습이 아니라 지금 모습대로, 첫 느낌으로 고르세요.</div>
+    <div class="fields">
+      <div><label class="f" for="nm">이름</label><input id="nm" placeholder="홍길동" autocomplete="off"></div>
+      <div><label class="f" for="bd">생년월일</label><input id="bd" placeholder="79.6.19" autocomplete="off"></div>
+      <div><label class="f" for="ph">연락처</label><input id="ph" placeholder="010-0000-0000" inputmode="tel" autocomplete="off"></div>
+      <div><label class="f" for="sx">성별</label><select id="sx"><option value="">선택</option><option>여</option><option>남</option></select></div>
+    </div>
+    <div class="sticky"><div class="prog"><span id="pt">0 / 60 문장 완료</span><span>1 전혀 아니다 ~ 5 매우 그렇다</span></div><div class="bar"><i id="pb"></i></div></div>
+    <div id="items"></div>
+    <div class="msg" id="m-test"></div>
+    <button class="btn" id="b-finish">응답 마치기</button>
+    <button class="link" id="b-quit">그만두고 처음으로</button>
+  </section>
+
+  <section id="v-done" class="home" hidden>
+    <div class="card">
+      <h2>응답이 끝났습니다</h2>
+      <p>수고하셨습니다. 결과는 이 화면에 나오지 않습니다. 지점장이 확인한 뒤 설명해 드립니다.</p>
+      <p>아이패드를 지점장에게 돌려주세요.</p>
+    </div>
+    <button class="btn ghost" id="b-done">처음으로</button>
+  </section>
+
+  <section id="v-pin" hidden>
+    <h1>결과 보기</h1>
+    <p class="lead">지점장 전용. 비밀번호 4자리를 넣습니다.</p>
+    <input class="pin" id="pin" type="tel" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="비밀번호">
+    <div class="msg" id="m-pin"></div>
+    <button class="btn" id="b-pin">열기</button>
+    <button class="btn ghost" id="b-pinback">처음으로</button>
+    <button class="link" id="b-forgot">비밀번호를 잊었을 때 (저장된 결과가 모두 지워집니다)</button>
+  </section>
+
+  <section id="v-list" hidden>
+    <h1>검사 결과</h1>
+    <p class="lead" id="cnt"></p>
+    <div id="rows"></div>
+    <div class="two">
+      <button class="btn ghost" id="b-backup">전체 보관용 복사</button>
+      <button class="btn ghost" id="b-import">응답 코드로 추가</button>
+    </div>
+    <div id="imp" hidden>
+      <p class="note">보관해 둔 글이나 후보자가 보낸 응답 코드(PP1. 로 시작)를 붙여 넣습니다. 여러 개를 한꺼번에 붙여도 됩니다.</p>
+      <textarea class="code" id="code" rows="5" placeholder="PP1.…"></textarea>
+      <button class="btn" id="b-add">추가하기</button>
+    </div>
+    <div class="msg" id="m-list"></div>
+    <button class="btn" id="b-exit">나가기</button>
+    <p class="note">결과는 이 기기 안에만 있습니다. 사파리 방문 기록과 데이터를 지우거나 앱을 지우면 함께 지워지니, 가끔 "전체 보관용 복사"로 메모에 붙여 두세요.</p>
+  </section>
+
+  <section id="v-detail" hidden>
+    <div class="res" id="res"></div>
+    <button class="btn danger" id="b-del">이 결과 지우기</button>
+  </section>
+
+</div>
+<script>
+// 성향 14개. g: D 역동, A 분석, I 대인관계. q: [문장, 역방향이면 1] 순서는 정, 역, 정, 역
+var T=[
+{k:"자신감",g:"D",q:[["처음 해 보는 일을 맡아도 결국 해낼 거라고 생각한다.",0],["일을 시작하기 전에 내가 할 수 있을지부터 걱정한다.",1],["여러 사람 앞에서 내 생각을 말할 때 떨지 않는 편이다.",0],["잘한 일보다 못한 일이 더 오래 기억난다.",1]],
+ hi:"처음 해 보는 일도 일단 해 보는 편입니다. 시작이 빠른 것이 강점입니다.",lo:"시작하기 전에 할 수 있을지부터 따져 보는 편입니다. 능력보다 버릇에 가깝습니다.",act:"그날 해낸 일 한 가지를 저녁에 적어 봅니다."},
+{k:"리더십",g:"D",q:[["모임에서 정해지지 않은 일이 있으면 내가 나서서 정리한다.",0],["앞에서 이끄는 자리보다 뒤에서 돕는 자리가 편하다.",1],["다른 사람이 망설이면 방향을 정해 주는 편이다.",0],["누군가에게 일을 시키는 것이 불편하다.",1]],
+ hi:"사람들이 망설일 때 방향을 정해 주는 편입니다. 상담에서 고객의 결정을 돕는 힘이 됩니다.",lo:"앞에 나서기보다 맞춰 주는 편입니다. 상대는 편하게 느낍니다. 결정할 순간에 내 의견 한 마디를 보태면 됩니다.",act:"모임에서 '저라면 이렇게 합니다'를 한 번 말해 봅니다."},
+{k:"설득력",g:"D",q:[["내 이야기를 듣고 생각을 바꾼 사람이 여럿 있다.",0],["상대가 한 번 싫다고 하면 다시 권하지 않는다.",1],["값이나 조건을 조정하자는 이야기를 꺼내는 것이 어렵지 않다.",0],["부탁하는 말을 꺼내기까지 오래 걸린다.",1]],
+ hi:"상대 생각을 바꾸는 말을 잘 찾습니다. 제안할 때와 거절을 들었을 때 바로 쓰입니다.",lo:"권하거나 부탁하는 말을 부담스러워합니다. 설득하지 않아도 됩니다. 묻고, 들은 말을 돌려 주면 상대가 스스로 정합니다.",act:"부탁 한 가지를 미루지 않고 오늘 말해 봅니다."},
+{k:"성취지향",g:"D",q:[["목표를 숫자로 정해 두고 달성했는지 확인한다.",0],["큰 목표보다 무리 없는 수준이 좋다.",1],["남들이 충분하다고 해도 더 잘할 방법을 찾는다.",0],["순위나 등수가 매겨지는 일은 피하고 싶다.",1]],
+ hi:"기준을 높게 잡고 넘으려 합니다. 숫자로 된 목표가 잘 맞습니다.",lo:"남과 겨루는 방식을 좋아하지 않습니다. 순위 대신 지난주의 나와 견주는 방식이 맞습니다.",act:"이번 주 목표를 숫자 하나로 정해 봅니다."},
+{k:"에너지",g:"D",q:[["하루 일정이 꽉 차 있을 때 기운이 난다.",0],["약속이 하루에 여러 개 있으면 지친다.",1],["일을 받으면 바로 손을 대는 편이다.",0],["서두르기보다 여유 있게 일하고 싶다.",1]],
+ hi:"일정이 꽉 찰수록 기운이 나는 편입니다. 하루에 여러 사람을 만나도 버팁니다.",lo:"한 번에 하나씩, 내 속도로 하는 것을 좋아합니다. 매일 같은 시간에 같은 일을 하는 틀이 잘 맞습니다.",act:"중요한 일 하나를 매일 같은 시간에 해 봅니다."},
+{k:"분석력",g:"A",q:[["결정하기 전에 숫자나 자료를 먼저 찾아본다.",0],["자세히 따지기보다 느낌으로 정하는 편이다.",1],["문제가 생기면 원인을 하나씩 따져 본다.",0],["표나 숫자가 많은 자료는 읽기 싫다.",1]],
+ hi:"숫자와 자료로 따져 보고 정합니다. 보장 분석과 설계에서 강합니다.",lo:"길게 따지기보다 느낌으로 빨리 정합니다. 결정이 빠른 대신 근거 한 가지를 확인하는 습관이 필요합니다.",act:"결정 전에 숫자 한 가지만 찾아봅니다."},
+{k:"적응력",g:"A",q:[["일하는 방식이 바뀌어도 금방 익숙해진다.",0],["하던 방식이 바뀌면 한동안 불편하다.",1],["해 보지 않은 일을 맡는 것이 재미있다.",0],["계획이 갑자기 바뀌면 화가 난다.",1]],
+ hi:"바뀐 방식에 금방 익숙해집니다. 새 상품이나 제도를 빨리 따라갑니다.",lo:"익숙한 방식이 편합니다. 정해진 순서가 있을 때 실력이 나옵니다.",act:"늘 하던 일 하나를 다른 방법으로 해 봅니다."},
+{k:"세부사항 중시",g:"A",q:[["서류를 내기 전에 처음부터 다시 읽어 본다.",0],["작은 실수는 크게 신경 쓰지 않는다.",1],["약속과 할 일을 적어 두고 하나씩 지운다.",0],["책상이나 가방이 자주 어질러져 있다.",1]],
+ hi:"다시 확인하고 적어 두는 습관이 있습니다. 서류와 약속에서 실수가 적습니다.",lo:"작은 것에 매이지 않고 빨리 넘어갑니다. 점검표 하나가 있으면 실수가 줄어듭니다.",act:"내일 할 일을 세 줄로 적고 지워 봅니다."},
+{k:"끈기",g:"A",q:[["한 번 시작한 일은 시간이 걸려도 끝을 본다.",0],["결과가 바로 안 보이면 흥미가 떨어진다.",1],["여러 번 거절당하고도 다시 시도해 본 적이 있다.",0],["어려운 일은 뒤로 미뤄 두는 편이다.",1]],
+ hi:"시간이 걸려도 끝을 봅니다. 이 일에서 가장 오래 남는 힘입니다.",lo:"결과가 바로 안 보이면 힘이 빠지는 편입니다. 누구나 그렇습니다. 같이 확인해 주는 사람이 있으면 달라집니다.",act:"미뤄 둔 일 한 가지를 오늘 끝냅니다."},
+{k:"사교성",g:"I",q:[["모르는 사람에게 먼저 말을 거는 편이다.",0],["아는 사람이 없는 자리는 가고 싶지 않다.",1],["새로운 모임에 가는 것이 즐겁다.",0],["처음 만난 사람과는 무슨 말을 할지 몰라 조용히 있는다.",1]],
+ hi:"처음 보는 사람과 금방 말을 틉니다. 새 고객을 만나는 일에서 가장 큰 힘입니다.",lo:"낯선 자리가 편하지 않습니다. 아는 사람과 소개로 시작하는 방식이 맞습니다.",act:"아는 분 세 명에게 안부 연락을 해 봅니다."},
+{k:"협동심",g:"I",q:[["내 일이 끝나면 옆 사람 일을 거든다.",0],["함께 하는 일보다 혼자 하는 일이 편하다.",1],["모임에서 의견이 갈리면 중간에서 맞춰 본다.",0],["모임 분위기는 내가 신경 쓸 일이 아니라고 생각한다.",1]],
+ hi:"옆 사람 일을 거들고 분위기를 챙깁니다. 팀으로 움직일 때 힘이 됩니다.",lo:"혼자 하는 일이 편합니다. 이 일은 혼자서도 할 수 있습니다. 필요할 때 먼저 묻는 것만 더하면 됩니다.",act:"이번 주에 한 번, 먼저 도움을 청해 봅니다."},
+{k:"배려심",g:"I",q:[["상대가 말할 때 끝까지 듣고 나서 말한다.",0],["남의 고민을 오래 듣고 있으면 답답하다.",1],["주변 사람의 힘든 일을 먼저 알아채는 편이다.",0],["상대 기분보다 사실을 말하는 것이 먼저다.",1]],
+ hi:"상대 말을 끝까지 듣고 마음을 살핍니다. 고객이 속 이야기를 꺼냅니다.",lo:"기분보다 사실을 먼저 말하는 편입니다. 상대 말을 한 번 따라 말해 주는 것만으로도 달라집니다.",act:"대화에서 상대 말을 한 번 그대로 되풀이해 봅니다."},
+{k:"스트레스 내성",g:"I",q:[["싫은 소리를 들어도 하루를 넘기지 않고 잊는다.",0],["거절당하면 한동안 그 생각이 난다.",1],["급한 상황에서도 평소처럼 행동한다.",0],["일이 잘못될까 봐 잠을 설친 적이 자주 있다.",1]],
+ hi:"싫은 소리나 거절을 오래 담아 두지 않습니다. 다음 전화를 걸 수 있는 힘입니다.",lo:"거절이나 실수를 오래 생각하는 편입니다. 거절은 제안에 대한 답이지 나에 대한 답이 아닙니다.",act:"속상한 일이 있던 날, 믿는 사람에게 그날 바로 말해 봅니다."},
+{k:"감정 인식",g:"I",q:[["지금 내 기분이 어떤지 말로 설명할 수 있다.",0],["왜 짜증이 났는지 나중에야 알게 된다.",1],["기분이 나빠지면 그 이유를 대체로 안다.",0],["내 표정이 어떤지 남이 말해 줘야 안다.",1]],
+ hi:"내 기분과 그 이유를 잘 압니다. 일이 안 풀린 날 원인을 스스로 찾습니다.",lo:"기분이 왜 그런지 나중에 알게 되는 편입니다. 하루 끝에 한 줄만 적어도 보입니다.",act:"오늘 기분을 한 줄로 적어 봅니다."}
+];
+// 좋게 보이려는 답 확인용 4개. 집계에 넣지 않음
+var V=["살면서 약속 시간에 늦은 적이 한 번도 없다.","누구에게도 화를 내 본 적이 없다.","남의 말을 나쁘게 한 적이 한 번도 없다.","모르는 것을 아는 척한 적이 한 번도 없다."];
+var GN={D:"역동",A:"분석",I:"대인관계"}, GC={D:"var(--gd)",A:"var(--ga)",I:"var(--gi)"};
+var STYLE={
+D:{n:"역동형",k:"결과와 속도",t:"목표가 정해지면 바로 움직이고 결정이 빠릅니다. 설득보다 결론을 원하고, 내가 정할 수 있을 때 힘이 납니다."},
+I:{n:"대인관계형",k:"사람과 관계",t:"사람을 만나는 데서 힘을 얻고 관계를 오래 이어 갑니다. 잘 듣고 잘 어울립니다."},
+A:{n:"분석형",k:"정확과 근거",t:"사실과 기준을 따지고 준비가 철저합니다. 근거가 있을 때 움직이며 틀리는 것을 싫어합니다."},
+DA:{n:"역동분석형",k:"결과와 근거",t:"빠르게 결정하되 근거를 봅니다. 효율과 정확을 함께 챙깁니다."},
+DI:{n:"역동대인관계형",k:"결과와 사람",t:"사람을 끌어당기면서 결정도 빠릅니다. 관계를 결과로 이어 갑니다."},
+AI:{n:"분석대인관계형",k:"관계와 근거",t:"사람을 좋아하지만 신중합니다. 관계를 지키면서 확인할 것은 확인합니다."},
+C:{n:"결합형",k:"고른 균형",t:"세 쪽이 고르게 나왔습니다. 상황에 맞춰 방식을 바꿔 쓰는 편입니다."}
+};
+var OPT=["전혀 아니다","아니다","보통이다","그렇다","매우 그렇다"];
+
+// 문항 순서: 네 바퀴, 바퀴마다 성향 순서를 밀고 끝에 확인용 문장 하나
+var SEQ=[];
+for(var r=0;r<4;r++){ for(var j=0;j<14;j++){ var t=(j+r*5)%14; SEQ.push({t:t,r:r,x:T[t].q[r][0],rev:T[t].q[r][1]}); } SEQ.push({v:r,x:V[r]}); }
+
+function score(a){
+  var sum=T.map(function(){return 0}), fake=0;
+  SEQ.forEach(function(it,i){ if(it.v!==undefined){ if(a[i]>=4)fake++; } else sum[it.t]+= it.rev?6-a[i]:a[i]; });
+  var tr=sum.map(function(s){return s/4});
+  var G={D:[],A:[],I:[]};T.forEach(function(x,i){G[x.g].push(tr[i])});
+  var gm={};Object.keys(G).forEach(function(k){gm[k]=G[k].reduce(function(p,c){return p+c},0)/G[k].length});
+  var ord=['D','A','I'].sort(function(x,y){return gm[y]-gm[x]});
+  var st; if(gm[ord[0]]-gm[ord[2]]<0.3) st='C';
+  else if(gm[ord[0]]-gm[ord[1]]<0.3){ var p=[ord[0],ord[1]]; st=p.indexOf('D')>-1?(p.indexOf('A')>-1?'DA':'DI'):'AI'; }
+  else st=ord[0];
+  return {tr:tr,gm:gm,st:st,fake:fake};
+}
+function lvl(v){return v>=3.75?'높음':(v<=2.75?'낮음':'보통')}
+function f1(v){return v.toFixed(1)}
+
+
+// PSP 영업성향 7가지 순서와 면담용 요약 [강점, 개발 영역]
+var ORDER=['D','A','I','C','DI','DA','AI'];
+var COACH={
+D:['목표를 세우고 바로 실행함, 성과가 빨리 남','성급한 결정, 계약 뒤 후속관리'],
+A:['니즈 분석, 상품 설명, 사후 서비스','가망고객 발굴, 클로징'],
+I:['가망고객 발굴, 거절 처리, 사후관리','계획 세우기, 프리젠테이션, 클로징, 규정 지키기'],
+C:['바로 반응하고 아이디어를 곧장 실행함','기한 지키기, 방향 유지'],
+DI:['신뢰 관계, 유지율, 거절 대처','감정 소모, 업무량 조절'],
+DA:['전략, 추진력, 시간 관리','직설적인 말, 조급함, 가망고객 발굴'],
+AI:['니즈에 맞춘 설득, 오래 가는 신뢰','결정을 이끄는 단계에서 멈춤']
+};
+function el(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function b64e(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))))}
+function b64d(s){return JSON.parse(decodeURIComponent(escape(atob(s))))}
+function okRec(o){return o&&typeof o.a==='string'&&/^[1-5]+$/.test(o.a)&&o.a.length===SEQ.length}
+var LS={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+        set:function(k,v){try{localStorage.setItem(k,v);return localStorage.getItem(k)===v}catch(e){return false}},
+        del:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+function hash(s){var x=5381,i,r;s='pp-ulsan:'+s;for(r=0;r<300;r++)for(i=0;i<s.length;i++)x=(Math.imul(x,33)^s.charCodeAt(i)^r)>>>0;return x.toString(36)}
+function loadR(){try{var v=LS.get('pp_results');var a=v?b64d(v):[];return Array.isArray(a)?a.filter(okRec):[]}catch(e){return []}}
+function saveR(a){return LS.set('pp_results',b64e(a))}
+
+var VIEWS=['setup','home','test','done','pin','list','detail'];
+function show(v){VIEWS.forEach(function(id){el('v-'+id).hidden=(id!==v)});window.scrollTo(0,0)}
+function copy(txt,btn,done){
+  function ok(){btn.textContent=done}
+  function fb(){var ta=document.createElement('textarea');ta.className='code';ta.value=txt;ta.rows=6;btn.parentNode.parentNode.insertBefore(ta,btn.parentNode.nextSibling);ta.select();btn.textContent='아래 글을 전체 복사하세요'}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,fb)}else fb();
+}
+
+// 처음 설정
+el('b-setup').addEventListener('click',function(){
+  var a=el('p1').value.trim(), b=el('p2').value.trim(), m=el('m-setup');
+  if(!/^[0-9]{4}$/.test(a)){m.textContent='숫자 4자리로 적어 주세요.';return}
+  if(a!==b){m.textContent='두 번 적은 숫자가 다릅니다.';return}
+  if(!LS.set('pp_pin',hash(a))){m.textContent='이 기기에 저장이 되지 않습니다. 사파리 개인정보 보호 모드를 끄고 다시 열어 주세요.';return}
+  el('p1').value='';el('p2').value='';m.textContent='';show('home');
+});
+
+// 검사
+var ans=[];
+function startTest(){
+  ans=new Array(SEQ.length).fill(0);
+  ['nm','bd','ph','sx'].forEach(function(id){el(id).value=''});
+  var box=el('items');box.innerHTML='';
+  SEQ.forEach(function(it,i){
+    var d=document.createElement('div');d.className='item';d.id='it'+i;
+    var h='<div class="q"><b>'+(i+1)+'</b><span>'+it.x+'</span></div><div class="opts" role="radiogroup" aria-label="'+(i+1)+'번">';
+    for(var s=1;s<=5;s++) h+='<label><input type="radio" name="a'+i+'" id="a'+i+'_'+s+'" value="'+s+'"><em>'+s+'</em>'+OPT[s-1]+'</label>';
+    d.innerHTML=h+'</div>';box.appendChild(d);
+  });
+  prog();el('m-test').textContent='';show('test');
+}
+function prog(){var done=ans.filter(Boolean).length;el('pt').textContent=done+' / '+SEQ.length+' 문장 완료';el('pb').style.width=(done/SEQ.length*100)+'%'}
+el('items').addEventListener('change',function(e){
+  var t=e.target;if(t.type!=='radio')return;
+  var i=+t.name.slice(1);ans[i]=+t.value;
+  var it=el('it'+i);it.classList.remove('err');it.classList.add('done');prog();
+});
+el('b-start').addEventListener('click',startTest);
+el('b-quit').addEventListener('click',function(){if(confirm('지금까지 고른 답이 지워집니다. 그만둘까요?'))show('home')});
+el('b-finish').addEventListener('click',function(){
+  var m=el('m-test'), name=el('nm').value.trim();
+  if(!name){m.textContent='맨 위에 이름을 적어 주세요.';el('nm').scrollIntoView({behavior:'smooth',block:'center'});return}
+  var miss=[];ans.forEach(function(v,i){if(!v)miss.push(i)});
+  if(miss.length){miss.forEach(function(i){el('it'+i).classList.add('err')});
+    m.textContent='아직 고르지 않은 문장이 '+miss.length+'개 있습니다. '+(miss[0]+1)+'번부터 확인해 주세요.';
+    el('it'+miss[0]).scrollIntoView({behavior:'smooth',block:'center'});return}
+  var t=new Date(), d=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
+  var all=loadR();all.push({id:t.getTime(),n:name,b:el('bd').value.trim(),p:el('ph').value.trim(),s:el('sx').value,d:d,a:ans.join('')});
+  if(!saveR(all)){m.textContent='저장이 되지 않았습니다. 화면을 그대로 두고 지점장에게 알려 주세요.';return}
+  m.textContent='';el('items').innerHTML='';show('done');
+});
+el('b-done').addEventListener('click',function(){show('home')});
+
+// 지점장 화면
+el('b-admin').addEventListener('click',function(){el('pin').value='';el('m-pin').textContent='';show('pin');el('pin').focus()});
+el('b-pinback').addEventListener('click',function(){show('home')});
+function tryPin(){ if(hash(el('pin').value.trim())===LS.get('pp_pin')){el('pin').value='';showList()} else {el('m-pin').textContent='비밀번호가 다릅니다.';el('pin').value=''} }
+el('b-pin').addEventListener('click',tryPin);
+el('pin').addEventListener('keydown',function(e){if(e.key==='Enter')tryPin()});
+el('b-forgot').addEventListener('click',function(){
+  if(!confirm('비밀번호를 새로 정하려면 이 기기에 저장된 검사 결과가 모두 지워집니다. 계속할까요?'))return;
+  if(!confirm('정말 모두 지울까요? 되돌릴 수 없습니다.'))return;
+  LS.del('pp_results');LS.del('pp_pin');show('setup');
+});
+
+var cur=null;
+function showList(){
+  var all=loadR().sort(function(x,y){return (y.id||0)-(x.id||0)}), box=el('rows');
+  el('cnt').textContent=all.length?('모두 '+all.length+'명. 이름을 누르면 결과가 열립니다.'):'아직 저장된 결과가 없습니다.';
+  box.innerHTML='';
+  var by={};ORDER.forEach(function(k){by[k]=[]});
+  all.forEach(function(P){var sc=score(P.a.split('').map(Number));by[sc.st].push({P:P,sc:sc})});
+  var sum=document.createElement('div');sum.className='seven';
+  sum.innerHTML=ORDER.map(function(k){return '<div'+(by[k].length?'':' class="zero"')+'><b>'+by[k].length+'</b><span>'+STYLE[k].n+'</span></div>'}).join('');
+  box.appendChild(sum);
+  ORDER.forEach(function(k){
+    if(!by[k].length)return;
+    var h=document.createElement('h3');h.className='gh';h.textContent=STYLE[k].n+' '+by[k].length+'명';box.appendChild(h);
+    by[k].forEach(function(o){
+      var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';
+      b.innerHTML='<b>'+esc(P.n||'이름 없음')+'</b><em>역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인 '+f1(sc.gm.I)+'</em><span>'+esc(P.d||'')+(P.b?', '+esc(P.b):'')+(sc.fake>=3?', 확인용 문장 주의':'')+'</span>';
+      b.addEventListener('click',function(){cur=P;render(sc,P);show('detail')});
+      box.appendChild(b);
+    });
+  });
+  el('imp').hidden=true;el('m-list').textContent='';el('b-backup').textContent='전체 보관용 복사';
+  show('list');
+}
+el('b-exit').addEventListener('click',function(){show('home')});
+el('b-backup').addEventListener('click',function(){
+  var all=loadR();if(!all.length){el('m-list').textContent='보관할 결과가 없습니다.';return}
+  var txt='[퍼스널 프로파일 보관 '+all.length+'명]\n'+all.map(function(P){return (P.n||'')+' '+(P.d||'')+'\nPP1.'+b64e({n:P.n,b:P.b,p:P.p,s:P.s,d:P.d,a:P.a})}).join('\n');
+  copy(txt,this,'복사됨. 메모에 붙여 두세요');
+});
+el('b-import').addEventListener('click',function(){el('imp').hidden=!el('imp').hidden});
+el('b-add').addEventListener('click',function(){
+  var found=String(el('code').value).replace(/[ \t]+/g,'').match(/PP1\.[A-Za-z0-9+\/=]+/g)||[], all=loadR(), add=0, dup=0, bad=0;
+  found.forEach(function(c,k){
+    var o;try{o=b64d(c.slice(4))}catch(e){o=null}
+    if(!okRec(o)){bad++;return}
+    if(all.some(function(x){return x.n===o.n&&x.d===o.d&&x.a===o.a})){dup++;return}
+    all.push({id:Date.now()+k,n:o.n||'',b:o.b||'',p:o.p||'',s:o.s||'',d:o.d||'',a:o.a});add++;
+  });
+  if(!found.length){el('m-list').textContent='PP1. 로 시작하는 코드를 찾지 못했습니다.';return}
+  if(add&&!saveR(all)){el('m-list').textContent='저장이 되지 않았습니다.';return}
+  el('code').value='';showList();
+  el('m-list').textContent=add+'명 추가'+(dup?', 이미 있는 것 '+dup+'개':'')+(bad?', 읽지 못한 것 '+bad+'개':'')+'.';
+});
+el('b-del').addEventListener('click',function(){
+  if(!cur||!confirm((cur.n||'이')+' 결과를 지울까요? 되돌릴 수 없습니다.'))return;
+  saveR(loadR().filter(function(x){return !(x.id===cur.id&&x.a===cur.a&&x.n===cur.n)}));cur=null;showList();
+});
+function render(sc,P){
+  var name=(P.n||''), st=STYLE[sc.st];
+  var idx=T.map(function(_,i){return i}).sort(function(a,b){return sc.tr[b]-sc.tr[a]});
+  var top=idx.slice(0,2), bot=idx.slice(-2).reverse();
+  var bars=['D','A','I'].map(function(g){return T.map(function(x,i){ if(x.g!==g)return '';
+    return '<div class="brow"><span class="nm">'+x.k+'</span><span class="tr"><i style="width:'+((sc.tr[i]-1)/4*100)+'%;background:'+GC[g]+'"></i></span><span class="sc">'+f1(sc.tr[i])+' '+lvl(sc.tr[i])+'</span></div>'}).join('')}).join('');
+  var html='<h2>'+(name?esc(name)+' 님의 ':'')+'결과</h2><p class="lead">응답일 '+esc(P.d||'-')+', 생년월일 '+esc(P.b||'-')+', 연락처 '+esc(P.p||'-')+', 성별 '+esc(P.s||'-')+'</p>'
+   +(sc.fake>=3?'<div class="flag">좋게 보이려는 쪽으로 답한 문장이 많습니다. 결과가 실제보다 좋게 나왔을 수 있으니 면담에서 다시 확인하세요.</div>':'')
+   +'<div class="hero"><span class="tag">영업성향</span><p class="type">'+st.n+'</p><p class="kw">'+st.k+'</p><p>'+st.t+'</p></div><div class="desc"><h4>'+st.n+'과 면담할 때</h4><p><b>강점</b> '+COACH[sc.st][0]+'</p><p><b>개발 영역</b> '+COACH[sc.st][1]+'</p></div>'
+   +'<div class="grp">'+['D','A','I'].map(function(g){return '<div><b style="color:'+GC[g]+'">'+f1(sc.gm[g])+'</b><span>'+GN[g]+' 묶음</span></div>'}).join('')+'</div>'
+   +'<h3>14개 성향 점수 (1.0 ~ 5.0)</h3><div class="bars">'+bars+'</div>'
+   +'<div class="lg">'+['D','A','I'].map(function(g){return '<span><i style="background:'+GC[g]+'"></i>'+GN[g]+'</span>'}).join('')+'<span>3.75 이상 높음, 2.75 이하 낮음</span></div>'
+   +'<h3>가장 높게 나온 두 가지</h3>'+top.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].hi+'</p></div>'}).join('')
+   +'<h3>가장 낮게 나온 두 가지</h3>'+bot.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].lo+'</p><p class="act">해 볼 것: '+T[i].act+'</p></div>'}).join('')
+   +'<button class="btn" id="cp">결과 복사하기</button><button class="btn ghost" id="rt">목록으로</button>'
+   +'<p class="note">울산지점에서 직접 만든 참고용 검사입니다. 본사 PSP 진단과는 다른 검사이며 결과가 같지 않을 수 있습니다. 사람을 한 가지 유형으로 단정하지 않습니다.</p>';
+  var r=document.getElementById('res');r.innerHTML=html;r.hidden=false;
+  
+  
+  var txt='[퍼스널 프로파일 문장형 결과]\n이름: '+name+'\n응답일: '+(P.d||'')+'\n생년월일: '+(P.b||'')+'\n연락처: '+(P.p||'')+'\n성별: '+(P.s||'')
+    +'\n영업성향: '+st.n+'\n강점: '+COACH[sc.st][0]+'\n개발 영역: '+COACH[sc.st][1]+'\n묶음 평균: 역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인관계 '+f1(sc.gm.I)
+    +'\n'+T.map(function(x,i){return x.k+' '+f1(sc.tr[i])+' '+lvl(sc.tr[i])}).join('\n')
+    +'\n높은 두 가지: '+top.map(function(i){return T[i].k}).join(', ')+'\n낮은 두 가지: '+bot.map(function(i){return T[i].k}).join(', ')
+    +'\n확인용 문장 4개 중 그렇다 이상: '+sc.fake+'개'+(sc.fake>=3?' (좋게 보이려는 답 주의)':'');
+  document.getElementById('cp').addEventListener('click',function(){
+    var b=this;function ok(){b.textContent='복사됨'}
+    function fb(){var ta=document.createElement('textarea');ta.className='fb';ta.value=txt;ta.rows=10;b.parentNode.insertBefore(ta,b.nextSibling);ta.select();b.textContent='아래 글을 길게 눌러 복사하세요'}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,fb)}else fb();
+  });
+  document.getElementById('rt').addEventListener('click',function(){showList()});
+}
+
+
+show(LS.get('pp_pin')?'home':'setup');
+if('serviceWorker' in navigator && location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){})}
+</script>
+</body>
+</html>

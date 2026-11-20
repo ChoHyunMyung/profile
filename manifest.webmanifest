@@ -1,6 +1,6 @@
 {
- "name": "부산7본부 퍼스널 프로파일",
- "short_name": "프로파일",
+ "name": "부산7본부 PSP 검사",
+ "short_name": "PSP",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

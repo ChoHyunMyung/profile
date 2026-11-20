@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>퍼스널 프로파일</title>
+<title>PSP 검사</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="프로파일">
+<meta name="apple-mobile-web-app-title" content="PSP">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#F2F4F7">
 <meta name="robots" content="noindex,nofollow">
@@ -434,6 +434,10 @@ label.f{font-size:.78rem;letter-spacing:.5px;color:var(--muted);font-weight:700}
   .res h2 + .lead{padding:0 22px 20px}
 }
 
+.eyebrow{font-size:.82rem;letter-spacing:3px;color:var(--gold);font-weight:800;margin:0 0 12px}
+.eyebrow.dark{color:var(--sw-blue2);margin:36px 0 0}
+.eyebrow.dark + h1{margin-top:6px}
+
 </style>
 </head>
 <body>
@@ -457,7 +461,8 @@ label.f{font-size:.78rem;letter-spacing:.5px;color:var(--muted);font-weight:700}
     <div class="stage" aria-hidden="true"></div>
     <div class="panel">
     <div class="mini" aria-hidden="true"><span class="ic" style="--c:#F70201"><img src="i-D.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#FBAD02"><img src="i-DI.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#FEF905"><img src="i-DA.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#019F50"><img src="i-A.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#0163BD"><img src="i-AI.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#011C59"><img src="i-I.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#79269A"><img src="i-C.png" alt="" width="128" height="128"></span></div>
-    <h1>부산7본부<br>퍼스널 프로파일 검사</h1>
+    <p class="eyebrow">Personality Styles Profile</p>
+    <h1>부산7본부<br>PSP 검사</h1>
     <p class="lead">MetLife 부산7본부 후보자용. 문장 60개, 약 10분.</p>
     <button class="btn" id="b-start">검사 시작</button>
     </div>
@@ -466,7 +471,8 @@ label.f{font-size:.78rem;letter-spacing:.5px;color:var(--muted);font-weight:700}
   </section>
 
   <section id="v-test" hidden>
-    <h1>퍼스널 프로파일 검사</h1>
+    <p class="eyebrow dark">Personality Styles Profile</p>
+    <h1>PSP 검사</h1>
     <div class="rule">문장을 읽고 <b>평소의 나와 얼마나 같은지</b> 다섯 가지 답 가운데 하나를 고릅니다. 정답은 없습니다. 되고 싶은 모습이 아니라 지금 모습대로, 첫 느낌으로 고르세요.</div>
     <div class="fields">
       <div class="wide"><label class="f" for="br">지점</label><select id="br"></select></div>
@@ -728,7 +734,7 @@ function showList(){
 el('b-exit').addEventListener('click',function(){show('home')});
 el('b-backup').addEventListener('click',function(){
   var all=loadR();if(!all.length){el('m-list').textContent='보관할 결과가 없습니다.';return}
-  var txt='[퍼스널 프로파일 보관 '+all.length+'명]\n'+all.map(function(P){return (P.n||'')+' '+(P.d||'')+'\nPP1.'+b64e({br:P.br||'',n:P.n,b:P.b,p:P.p,s:P.s,d:P.d,a:P.a})}).join('\n');
+  var txt='[PSP 보관 '+all.length+'명]\n'+all.map(function(P){return (P.n||'')+' '+(P.d||'')+'\nPP1.'+b64e({br:P.br||'',n:P.n,b:P.b,p:P.p,s:P.s,d:P.d,a:P.a})}).join('\n');
   copy(txt,this,'복사됨. 메모에 붙여 두세요');
 });
 el('b-import').addEventListener('click',function(){el('imp').hidden=!el('imp').hidden});
@@ -764,11 +770,11 @@ function render(sc,P){
    +'<h3>가장 높게 나온 두 가지</h3>'+top.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].hi+'</p></div>'}).join('')
    +'<h3>가장 낮게 나온 두 가지</h3>'+bot.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].lo+'</p><p class="act">해 볼 것: '+T[i].act+'</p></div>'}).join('')
    +'<button class="btn" id="cp">결과 복사하기</button><button class="btn ghost" id="rt">목록으로</button>'
-   +'<p class="note">부산7본부에서 직접 만든 참고용 검사입니다. 본사 PSP 진단과는 다른 검사이며 결과가 같지 않을 수 있습니다. 사람을 한 가지 유형으로 단정하지 않습니다.</p>';
+   +'<p class="note">PSP(Personality Styles Profile)를 본떠 부산7본부에서 직접 만든 참고용 검사입니다. 본사 정식 PSP 진단과는 문항이 달라 결과가 같지 않을 수 있습니다. 사람을 한 가지 유형으로 단정하지 않습니다.</p>';
   var r=document.getElementById('res');r.innerHTML=html;r.hidden=false;
   
   
-  var txt='[퍼스널 프로파일 문장형 결과]\n이름: '+name+'\n응답일: '+(P.d||'')+'\n생년월일: '+(P.b||'')+'\n연락처: '+(P.p||'')+'\n성별: '+(P.s||'')
+  var txt='[PSP 검사 결과]\n이름: '+name+'\n응답일: '+(P.d||'')+'\n생년월일: '+(P.b||'')+'\n연락처: '+(P.p||'')+'\n성별: '+(P.s||'')
     +'\n지점: '+(P.br||'')+'\n영업성향: '+st.n+' ('+AN[sc.st][0]+')\n강점: '+COACH[sc.st][0]+'\n개발 영역: '+COACH[sc.st][1]+'\n묶음 평균: 역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인관계 '+f1(sc.gm.I)
     +'\n'+T.map(function(x,i){return x.k+' '+f1(sc.tr[i])+' '+lvl(sc.tr[i])}).join('\n')
     +'\n높은 두 가지: '+top.map(function(i){return T[i].k}).join(', ')+'\n낮은 두 가지: '+bot.map(function(i){return T[i].k}).join(', ')

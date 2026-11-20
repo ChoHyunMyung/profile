@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="프로파일">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#0090DA">
+<meta name="theme-color" content="#008CD8">
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -21,7 +21,7 @@
   --blue:#0090DA; --deep:#0A4C8B; --navy:#0B2A4A; --green:#A4CE4E; --green-d:#5E8A12;
   --bg:#EEF3F8; --paper:#FFFFFF; --fg:#0B2A4A; --muted:#5F7388; --line:#DCE5EE; --ring:#B9C8D8;
   --accent:#0090DA; --accent-fg:#FFFFFF; --soft:#E1F1FB; --warn:#C8371F;
-  --gd:#FF0000; --ga:#00B050; --gi:#002060;
+  --gd:#FB0201; --ga:#01A651; --gi:#011E60;
   --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   color-scheme:light;
 }
@@ -31,7 +31,7 @@ html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:18px;line-height:1.6;word-break:keep-all;
   -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;transition:background-color .25s;
   padding:env(safe-area-inset-top,0px) max(24px,env(safe-area-inset-right,0px)) max(56px,env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
-body[data-v="home"],body[data-v="done"]{background:var(--blue);color:#fff}
+body[data-v="home"],body[data-v="done"]{background:#008CD8;color:#fff}
 .wrap{max-width:680px;margin:0 auto}
 h1{font-size:2.1rem;font-weight:800;line-height:1.2;letter-spacing:-.03em;margin:36px 0 8px}
 .lead{color:var(--muted);margin:0 0 24px;font-size:1rem}
@@ -111,13 +111,14 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 .seven{display:grid;grid-template-columns:repeat(7,1fr);background:var(--paper);border-radius:20px;padding:18px 6px;margin-bottom:8px}
 .seven div{text-align:center;min-width:0;padding:0 4px;border-left:1px solid var(--line)}
 .seven div:first-child{border-left:0}
-.seven i{display:block;height:10px;border-radius:5px;margin:0 6px 10px}
-.seven .zero i{opacity:.35}
+.seven .th{display:block;width:calc(100% - 8px);max-width:76px;height:auto;aspect-ratio:1;border-radius:16px;margin:0 auto 10px}
+.seven .zero .th{opacity:.3}
 .seven b{display:block;font-size:1.9rem;font-weight:800;line-height:1.1;color:var(--fg);font-variant-numeric:tabular-nums}
 .seven span{display:block;font-size:.74rem;font-weight:600;color:var(--muted);line-height:1.3;margin-top:4px}
 .seven em{display:block;font-style:normal;font-size:.74rem;color:var(--muted);margin-top:2px}
 .seven .zero b{color:var(--ring)}
-.gh{font-size:1rem;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:8px solid var(--blue);line-height:1.2}
+.gh{display:flex;align-items:center;gap:10px;font-size:1.05rem;font-weight:800;margin:30px 0 10px;line-height:1.2}
+.gh .gi{width:40px;height:40px;border-radius:10px;flex:none}
 .row{display:grid;grid-template-columns:1fr auto;gap:2px 16px;width:100%;text-align:left;font:inherit;color:var(--fg);background:var(--paper);border:0;border-radius:16px;padding:16px 20px 16px 28px;overflow:hidden;margin-bottom:8px;cursor:pointer}
 .row b{font-size:1.15rem;font-weight:700}
 .row span{color:var(--muted);font-size:.88rem}
@@ -128,12 +129,12 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 .res h2{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin:36px 0 4px}
 .res h3{font-size:1.05rem;font-weight:800;margin:36px 0 12px}
 .res .lead{font-size:.92rem;margin-bottom:20px}
-.hero{background:var(--navy);color:#fff;border-radius:24px;padding:28px 28px 26px;margin-bottom:12px;position:relative;overflow:hidden}
-.hero .big{position:absolute;right:22px;top:14px;font-size:104px;line-height:1}
+.hero{background:var(--navy);color:#fff;border-radius:24px;padding:32px 28px 30px;min-height:230px;margin-bottom:12px;position:relative;overflow:hidden}
+.hero .big{position:absolute;right:0;top:50%;transform:translateY(-50%);width:230px;height:230px}
 .hero .ani{font-weight:700;opacity:.85;margin:-4px 0 12px}
 .hero .tag{font-size:.85rem;font-weight:600;opacity:.7}
 .hero .type{font-size:clamp(2.4rem,7vw,3.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin:2px 0 10px}
-.hero p{margin:0 0 6px;max-width:calc(100% - 120px);position:relative;z-index:1}
+.hero p{margin:0 0 6px;max-width:calc(100% - 200px);position:relative;z-index:1}
 .hero .kw{font-weight:800}
 .flag{background:#FDECE8;color:var(--warn);border-radius:16px;padding:14px 18px;margin-bottom:12px;font-weight:600}
 .grp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -172,6 +173,11 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 
 @media (max-width:520px){ .hero .big{font-size:64px;right:14px;top:12px} .hero p{max-width:100%} .hero .type{max-width:calc(100% - 70px)} }
 
+.cover{display:block;width:100%;max-width:600px;height:auto;margin:0 0 20px -3%}
+.seven{padding:14px 6px 16px}
+.seven div{border-left:0}
+@media (max-width:520px){ .hero .big{width:120px;height:120px;top:8px;transform:none} .hero{min-height:0} .hero .type{max-width:calc(100% - 110px)} }
+
 </style>
 </head>
 <body>
@@ -192,7 +198,7 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
   </section>
 
   <section id="v-home" class="home" hidden>
-    <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></div>
+    <img class="cover" src="cover.png" alt="" width="1024" height="688">
     <h1>부산7본부<br>퍼스널 프로파일 검사</h1>
     <p class="lead">MetLife 부산7본부 후보자용. 문장 60개, 약 10분.</p>
     <button class="btn" id="b-start">검사 시작</button>
@@ -331,7 +337,8 @@ function f1(v){return v.toFixed(1)}
 
 // PSP 영업성향 7가지 순서와 면담용 요약 [강점, 개발 영역]
 var ORDER=['D','DI','DA','A','AI','I','C'];
-var PC={D:'#FF0000',DI:'#FFC000',DA:'#FFFF00',A:'#00B050',AI:'#0070C0',I:'#002060',C:'#7030A0'};
+var PC={D:'#FB0201',DI:'#FDB904',DA:'#FEFB08',A:'#01A651',AI:'#006BC0',I:'#011E60',C:'#772C9F'};
+function pic(k,c){return '<img class="'+c+'" src="a-'+k+'.png" alt="" width="512" height="512">'}
 var AN={D:['치타','🐆','Dynamic'],DI:['말','🐎','Dynamic-Interpersonal'],DA:['독수리','🦅','Dynamic-Analytic'],A:['올빼미','🦉','Analytic'],AI:['코끼리','🐘','Analytic-Interpersonal'],I:['돌고래','🐬','Interpersonal'],C:['용','🐉','Collaborative']};
 var PT={D:'#fff',DI:'#0B2A4A',DA:'#0B2A4A',A:'#fff',AI:'#fff',I:'#fff',C:'#fff'};
 var COACH={
@@ -444,11 +451,11 @@ function showList(){
   var by={};ORDER.forEach(function(k){by[k]=[]});
   all.forEach(function(P){var sc=score(P.a.split('').map(Number));by[sc.st].push({P:P,sc:sc})});
   var sum=document.createElement('div');sum.className='seven';
-  sum.innerHTML=ORDER.map(function(k){return '<div'+(by[k].length?'':' class="zero"')+'><i style="background:'+PC[k]+'"></i><b>'+by[k].length+'</b><span>'+STYLE[k].n+'</span><em>'+AN[k][1]+' '+AN[k][0]+'</em></div>'}).join('');
+  sum.innerHTML=ORDER.map(function(k){return '<div'+(by[k].length?'':' class="zero"')+'>'+pic(k,'th')+'<b>'+by[k].length+'</b><span>'+STYLE[k].n+'</span><em>'+AN[k][0]+'</em></div>'}).join('');
   box.appendChild(sum);
   ORDER.forEach(function(k){
     if(!by[k].length)return;
-    var h=document.createElement('h3');h.className='gh';h.style.borderLeftColor=PC[k];h.textContent=AN[k][1]+' '+STYLE[k].n+' ('+AN[k][0]+') '+by[k].length+'명';box.appendChild(h);
+    var h=document.createElement('h3');h.className='gh';h.innerHTML=pic(k,'gi')+'<span>'+STYLE[k].n+' ('+AN[k][0]+') '+by[k].length+'명</span>';box.appendChild(h);
     by[k].forEach(function(o){
       var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';b.style.boxShadow='inset 8px 0 0 '+PC[k];
       b.innerHTML='<b>'+esc(P.n||'이름 없음')+'</b><em>역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인 '+f1(sc.gm.I)+'</em><span>'+esc(BR.indexOf(P.br)>-1?P.br:'지점 없음')+', '+esc(P.d||'')+(P.b?', '+esc(P.b):'')+(sc.fake>=3?', 확인용 문장 주의':'')+'</span>';
@@ -491,7 +498,7 @@ function render(sc,P){
     return '<div class="brow"><span class="nm">'+x.k+'</span><span class="tr"><i style="width:'+((sc.tr[i]-1)/4*100)+'%;background:'+GC[g]+'"></i></span><span class="sc">'+f1(sc.tr[i])+' '+lvl(sc.tr[i])+'</span></div>'}).join('')}).join('');
   var html='<h2>'+(name?esc(name)+' 님의 ':'')+'결과</h2><p class="lead">지점 '+esc(P.br||'없음')+', 응답일 '+esc(P.d||'-')+', 생년월일 '+esc(P.b||'-')+', 연락처 '+esc(P.p||'-')+', 성별 '+esc(P.s||'-')+'</p>'
    +(sc.fake>=3?'<div class="flag">좋게 보이려는 쪽으로 답한 문장이 많습니다. 결과가 실제보다 좋게 나왔을 수 있으니 면담에서 다시 확인하세요.</div>':'')
-   +'<div class="hero" style="background:'+PC[sc.st]+';color:'+PT[sc.st]+'"><span class="tag">영업성향</span><p class="type">'+st.n+'</p><p class="ani">'+AN[sc.st][0]+', '+AN[sc.st][2]+'</p><span class="big" aria-hidden="true">'+AN[sc.st][1]+'</span><p class="kw">'+st.k+'</p><p>'+st.t+'</p></div><div class="desc"><h4>'+st.n+'과 면담할 때</h4><p><b>강점</b> '+COACH[sc.st][0]+'</p><p><b>개발 영역</b> '+COACH[sc.st][1]+'</p></div>'
+   +'<div class="hero" style="background:'+PC[sc.st]+';color:'+PT[sc.st]+'"><span class="tag">영업성향</span><p class="type">'+st.n+'</p><p class="ani">'+AN[sc.st][0]+', '+AN[sc.st][2]+'</p>'+pic(sc.st,'big')+'<p class="kw">'+st.k+'</p><p>'+st.t+'</p></div><div class="desc"><h4>'+st.n+'과 면담할 때</h4><p><b>강점</b> '+COACH[sc.st][0]+'</p><p><b>개발 영역</b> '+COACH[sc.st][1]+'</p></div>'
    +'<div class="grp">'+['D','A','I'].map(function(g){return '<div><b style="color:'+GC[g]+'">'+f1(sc.gm[g])+'</b><span>'+GN[g]+' 묶음</span></div>'}).join('')+'</div>'
    +'<h3>14개 성향 점수 (1.0 ~ 5.0)</h3><div class="bars">'+bars+'</div>'
    +'<div class="lg">'+['D','A','I'].map(function(g){return '<span><i style="background:'+GC[g]+'"></i>'+GN[g]+'</span>'}).join('')+'<span>3.75 이상 높음, 2.75 이하 낮음</span></div>'

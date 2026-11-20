@@ -13,8 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-180.png">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 /* 부산7본부 퍼스널 프로파일. MetLife 파랑과 초록, Pretendard 한 가지 글꼴.
    표지와 마침 화면은 파란 바탕, 문항은 흰 종이 한 장에 줄로 나눔, 답은 선 위의 동그라미 다섯 개 */
@@ -324,6 +323,115 @@ h1{font-weight:700;letter-spacing:-.02em}
   .mini{gap:9px}
   .mini .ic{width:28px;height:28px}
   .seven .th{width:32px;height:32px}
+}
+
+
+/* ───── 울산지점 Success Wheeler 개인별 자료의 디자인을 따름 ─────
+   짙은 남색 판 + 금색 세로 띠, Paperlogy 굵은 글씨, 하늘색 게이지, 흰 카드, 글자 사이 넓힌 작은 제목과 가는 줄 */
+@font-face{font-family:P;src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:P;src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2") format("woff2");font-weight:500 600;font-display:swap}
+@font-face{font-family:P;src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:P;src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2") format("woff2");font-weight:800 900;font-display:swap}
+:root{
+  --font:P,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --navy:#071B45; --gold:#E4BA6A; --sky:#5DB7F2; --sw-blue:#1F5FD1; --sw-blue2:#35609F; --ok:#1E9E5A; --bad:#D23B32;
+  --bg:#F6F7FA; --fg:#0E1A33; --muted:#5B6B8C; --line:#D5DCE8; --ring:#C4CDDC; --warn:#D23B32; --deep:#1F5FD1; --blue:#1F5FD1;
+  --lift:0 1px 2px rgba(14,26,51,.07),0 10px 24px rgba(14,26,51,.10);
+  --lift-hi:0 2px 4px rgba(7,27,69,.16),0 22px 44px rgba(7,27,69,.26);
+}
+body,body[data-v="home"],body[data-v="done"]{background:var(--bg);color:var(--fg)}
+h1{font-weight:900;letter-spacing:-.04em}
+.lead{color:var(--muted)}
+
+/* 표지: 하늘색 판 위에 남색 판, 오른쪽 금색 띠 */
+.stage{background:linear-gradient(120deg,#1F5FD1 0%,#3F8FE6 55%,#5DB7F2 100%);border-radius:12px}
+.stage::before{background:
+  radial-gradient(circle at 100% 0,rgba(228,186,106,.75) 0 150px,transparent 151px),
+  radial-gradient(circle at 78% 100%,rgba(7,27,69,.40) 0 190px,transparent 191px),
+  radial-gradient(circle at 56% 0,rgba(255,255,255,.16) 0 120px,transparent 121px)}
+.panel{background:var(--navy);border-radius:12px}
+.panel::before{background:
+  linear-gradient(128deg,transparent 0 62%,rgba(93,183,242,.14) 62% 80%,transparent 80%),
+  linear-gradient(52deg,transparent 0 74%,rgba(31,95,209,.30) 74%)}
+.panel::after{left:auto;right:0;top:0;bottom:0;width:7px;height:auto;background:var(--gold)}
+.home .panel h1{font-weight:900;font-size:clamp(2.3rem,6.2vw,3.3rem);letter-spacing:-.045em;line-height:1.12}
+.home .panel .lead{color:#9FB0D1;opacity:1;font-weight:500}
+.home .panel .btn{background:var(--gold);color:var(--navy);font-weight:900;box-shadow:0 4px 0 #A9853E,0 14px 26px rgba(0,0,0,.30)}
+.home .panel .btn:active{box-shadow:0 0 0 #A9853E,0 4px 10px rgba(0,0,0,.30)}
+.home .card.panel h2{font-weight:900;letter-spacing:-.04em}
+.home .card.panel p{color:#DCE4F3;opacity:1;font-weight:500}
+.home .btn.ghost{color:var(--navy)}
+.home .link,.home .note{color:var(--muted)}
+
+/* 단추 */
+.btn{border-radius:12px;font-weight:800;background:linear-gradient(180deg,#3A78E4 0%,#1F5FD1 100%);box-shadow:0 4px 0 #143F8F,0 12px 24px rgba(31,95,209,.30)}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 #143F8F,0 4px 10px rgba(31,95,209,.25)}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:0 3px 0 #C4CDDC,0 8px 18px rgba(14,26,51,.10)}
+.btn.danger{color:var(--bad);box-shadow:0 3px 0 #F2B8B3,0 8px 18px rgba(210,59,50,.12)}
+
+/* 종이와 입력 */
+#items,.fields,.bars,.seven,#imp{border-radius:14px;box-shadow:var(--lift)}
+#items::before,.fields::before,.bars::before,.seven::before{height:6px;background:var(--sw-blue)}
+.fields input,.fields select,.sel,.pin,textarea.code,textarea.fb{border-radius:10px}
+.fields input:focus,.fields select:focus,.sel:focus,.pin:focus,textarea.code:focus{border-color:var(--sw-blue)}
+label.f{font-size:.78rem;letter-spacing:.5px;color:var(--muted);font-weight:700}
+.rule{border-left:6px solid var(--gold);border-radius:0 12px 12px 0;font-weight:500}
+.rule b{font-weight:900;color:var(--navy)}
+
+/* 진행: 하늘색 게이지 */
+.sticky{background:linear-gradient(180deg,var(--bg) 78%,rgba(246,247,250,0))}
+.prog span:first-child{font-weight:900;font-size:1.15rem;letter-spacing:-.02em}
+.bar{background:#E3E8F0}
+.bar i{background:var(--sky)}
+
+/* 문항 */
+.item .q{font-weight:700;letter-spacing:-.015em}
+.item .q b{font-weight:900;color:var(--sw-blue)}
+.item.done .q b{color:var(--ok)}
+.item.err .q b{color:var(--bad)}
+.opts label{box-shadow:0 3px 0 #C4CDDC,0 8px 14px rgba(14,26,51,.14),inset 0 1px 0 #fff}
+.opts em{font-weight:800}
+.opts label:has(input:checked){background:linear-gradient(180deg,#3A78E4 0%,#1F5FD1 100%);
+  box-shadow:0 3px 0 #143F8F,0 10px 18px rgba(31,95,209,.42),inset 0 1px 0 rgba(255,255,255,.45)}
+
+/* 지점장 화면 */
+.chip{border-radius:10px;font-weight:800}
+.chip.on{background:var(--navy);box-shadow:0 3px 0 #020B22,0 8px 18px rgba(7,27,69,.30)}
+.seven b{font-weight:900;letter-spacing:-.03em;color:var(--fg)}
+.seven span{font-weight:700;color:var(--fg)}
+.gh{font-size:.82rem;letter-spacing:2px;color:var(--sw-blue2);font-weight:900}
+.gh::after{content:"";flex:1;height:1px;background:var(--line)}
+.row{border-radius:12px}
+.row b{font-weight:800}
+.row em{color:var(--sw-blue);font-weight:700}
+
+/* 개인 결과: 이름은 남색 판(금색 띠), 작은 제목은 글자 사이 넓히고 가는 줄 */
+.res h2{background:var(--navy);color:#fff;font-size:2.5rem;font-weight:900;letter-spacing:-.05em;line-height:1.05;
+  margin:28px 0 0;padding:30px 34px 6px;border-radius:14px 14px 0 0;box-shadow:inset -7px 0 0 var(--gold)}
+.res h2 + .lead{background:var(--navy);color:#9FB0D1;font-weight:500;font-size:.9rem;margin:0 0 14px;padding:0 34px 26px;
+  border-radius:0 0 14px 14px;box-shadow:inset -7px 0 0 var(--gold),0 22px 44px rgba(7,27,69,.22)}
+.res h3{display:flex;align-items:center;gap:12px;font-size:.82rem;letter-spacing:2px;color:var(--sw-blue2);font-weight:900;margin:34px 0 12px}
+.res h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.hero{border-radius:14px}
+.hero .tag{font-size:.78rem;letter-spacing:2px;font-weight:800;opacity:.75}
+.hero .type{font-weight:900;letter-spacing:-.05em}
+.hero .ani{font-weight:700}
+.hero + .desc{border-radius:14px}
+.grp div{border-radius:14px;padding:18px 10px 16px}
+.grp b{font-weight:900;font-size:2.3rem;letter-spacing:-.04em}
+.grp span{font-weight:700;color:var(--muted)}
+.brow .nm{font-weight:700}
+.brow .sc{font-weight:700}
+.desc{background:#fff;border:0;border-image:none;border-radius:14px;padding:18px 22px;margin:0 0 10px;box-shadow:var(--lift);border-top:5px solid var(--sw-blue)}
+.hero + .desc{border-top:0}
+.desc h4{font-weight:900;font-size:1.15rem;letter-spacing:-.02em}
+.desc .act{color:var(--sw-blue);font-weight:800}
+.desc p b{color:var(--sw-blue2);font-weight:800}
+.flag{background:#FFF0EE;color:var(--bad);box-shadow:inset 0 0 0 1.5px #F2B8B3;font-weight:700}
+.note{color:#8A97B0}
+@media (max-width:520px){
+  .res h2{font-size:2rem;padding:24px 22px 6px}
+  .res h2 + .lead{padding:0 22px 20px}
 }
 
 </style>

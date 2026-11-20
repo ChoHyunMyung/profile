@@ -21,7 +21,7 @@
   --blue:#0090DA; --deep:#0A4C8B; --navy:#0B2A4A; --green:#A4CE4E; --green-d:#5E8A12;
   --bg:#EEF3F8; --paper:#FFFFFF; --fg:#0B2A4A; --muted:#5F7388; --line:#DCE5EE; --ring:#B9C8D8;
   --accent:#0090DA; --accent-fg:#FFFFFF; --soft:#E1F1FB; --warn:#C8371F;
-  --gd:#0090DA; --ga:#0A4C8B; --gi:#7FB02A;
+  --gd:#FF0000; --ga:#00B050; --gi:#002060;
   --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   color-scheme:light;
 }
@@ -111,11 +111,14 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 .seven{display:grid;grid-template-columns:repeat(7,1fr);background:var(--paper);border-radius:20px;padding:18px 6px;margin-bottom:8px}
 .seven div{text-align:center;min-width:0;padding:0 4px;border-left:1px solid var(--line)}
 .seven div:first-child{border-left:0}
-.seven b{display:block;font-size:1.9rem;font-weight:800;line-height:1.1;color:var(--blue);font-variant-numeric:tabular-nums}
+.seven i{display:block;height:10px;border-radius:5px;margin:0 6px 10px}
+.seven .zero i{opacity:.35}
+.seven b{display:block;font-size:1.9rem;font-weight:800;line-height:1.1;color:var(--fg);font-variant-numeric:tabular-nums}
 .seven span{display:block;font-size:.74rem;font-weight:600;color:var(--muted);line-height:1.3;margin-top:4px}
+.seven em{display:block;font-style:normal;font-size:.74rem;color:var(--muted);margin-top:2px}
 .seven .zero b{color:var(--ring)}
-.gh{font-size:1rem;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:4px solid var(--blue);line-height:1.2}
-.row{display:grid;grid-template-columns:1fr auto;gap:2px 16px;width:100%;text-align:left;font:inherit;color:var(--fg);background:var(--paper);border:0;border-radius:16px;padding:16px 20px;margin-bottom:8px;cursor:pointer}
+.gh{font-size:1rem;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:8px solid var(--blue);line-height:1.2}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 16px;width:100%;text-align:left;font:inherit;color:var(--fg);background:var(--paper);border:0;border-radius:16px;padding:16px 20px 16px 28px;overflow:hidden;margin-bottom:8px;cursor:pointer}
 .row b{font-size:1.15rem;font-weight:700}
 .row span{color:var(--muted);font-size:.88rem}
 .row em{font-style:normal;font-weight:600;font-size:.88rem;color:var(--deep);grid-row:span 2;align-self:center;font-variant-numeric:tabular-nums}
@@ -126,11 +129,12 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 .res h3{font-size:1.05rem;font-weight:800;margin:36px 0 12px}
 .res .lead{font-size:.92rem;margin-bottom:20px}
 .hero{background:var(--navy);color:#fff;border-radius:24px;padding:28px 28px 26px;margin-bottom:12px;position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;border:26px solid var(--green);opacity:.9}
+.hero .big{position:absolute;right:22px;top:14px;font-size:104px;line-height:1}
+.hero .ani{font-weight:700;opacity:.85;margin:-4px 0 12px}
 .hero .tag{font-size:.85rem;font-weight:600;opacity:.7}
 .hero .type{font-size:clamp(2.4rem,7vw,3.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin:2px 0 10px}
-.hero p{margin:0 0 6px;max-width:30em;position:relative;z-index:1}
-.hero .kw{font-weight:700;color:var(--green)}
+.hero p{margin:0 0 6px;max-width:calc(100% - 120px);position:relative;z-index:1}
+.hero .kw{font-weight:800}
 .flag{background:#FDECE8;color:var(--warn);border-radius:16px;padding:14px 18px;margin-bottom:12px;font-weight:600}
 .grp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .grp div{background:var(--paper);border-radius:18px;padding:16px 10px 14px;text-align:center}
@@ -165,6 +169,8 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
   .bars{padding:8px 16px}
 }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+
+@media (max-width:520px){ .hero .big{font-size:64px;right:14px;top:12px} .hero p{max-width:100%} .hero .type{max-width:calc(100% - 70px)} }
 
 </style>
 </head>
@@ -324,7 +330,10 @@ function f1(v){return v.toFixed(1)}
 
 
 // PSP 영업성향 7가지 순서와 면담용 요약 [강점, 개발 영역]
-var ORDER=['D','A','I','C','DI','DA','AI'];
+var ORDER=['D','DI','DA','A','AI','I','C'];
+var PC={D:'#FF0000',DI:'#FFC000',DA:'#FFFF00',A:'#00B050',AI:'#0070C0',I:'#002060',C:'#7030A0'};
+var AN={D:['치타','🐆','Dynamic'],DI:['말','🐎','Dynamic-Interpersonal'],DA:['독수리','🦅','Dynamic-Analytic'],A:['올빼미','🦉','Analytic'],AI:['코끼리','🐘','Analytic-Interpersonal'],I:['돌고래','🐬','Interpersonal'],C:['용','🐉','Collaborative']};
+var PT={D:'#fff',DI:'#0B2A4A',DA:'#0B2A4A',A:'#fff',AI:'#fff',I:'#fff',C:'#fff'};
 var COACH={
 D:['목표를 세우고 바로 실행함, 성과가 빨리 남','성급한 결정, 계약 뒤 후속관리'],
 A:['니즈 분석, 상품 설명, 사후 서비스','가망고객 발굴, 클로징'],
@@ -435,13 +444,13 @@ function showList(){
   var by={};ORDER.forEach(function(k){by[k]=[]});
   all.forEach(function(P){var sc=score(P.a.split('').map(Number));by[sc.st].push({P:P,sc:sc})});
   var sum=document.createElement('div');sum.className='seven';
-  sum.innerHTML=ORDER.map(function(k){return '<div'+(by[k].length?'':' class="zero"')+'><b>'+by[k].length+'</b><span>'+STYLE[k].n+'</span></div>'}).join('');
+  sum.innerHTML=ORDER.map(function(k){return '<div'+(by[k].length?'':' class="zero"')+'><i style="background:'+PC[k]+'"></i><b>'+by[k].length+'</b><span>'+STYLE[k].n+'</span><em>'+AN[k][1]+' '+AN[k][0]+'</em></div>'}).join('');
   box.appendChild(sum);
   ORDER.forEach(function(k){
     if(!by[k].length)return;
-    var h=document.createElement('h3');h.className='gh';h.textContent=STYLE[k].n+' '+by[k].length+'명';box.appendChild(h);
+    var h=document.createElement('h3');h.className='gh';h.style.borderLeftColor=PC[k];h.textContent=AN[k][1]+' '+STYLE[k].n+' ('+AN[k][0]+') '+by[k].length+'명';box.appendChild(h);
     by[k].forEach(function(o){
-      var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';
+      var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';b.style.boxShadow='inset 8px 0 0 '+PC[k];
       b.innerHTML='<b>'+esc(P.n||'이름 없음')+'</b><em>역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인 '+f1(sc.gm.I)+'</em><span>'+esc(BR.indexOf(P.br)>-1?P.br:'지점 없음')+', '+esc(P.d||'')+(P.b?', '+esc(P.b):'')+(sc.fake>=3?', 확인용 문장 주의':'')+'</span>';
       b.addEventListener('click',function(){cur=P;render(sc,P);show('detail')});
       box.appendChild(b);
@@ -482,7 +491,7 @@ function render(sc,P){
     return '<div class="brow"><span class="nm">'+x.k+'</span><span class="tr"><i style="width:'+((sc.tr[i]-1)/4*100)+'%;background:'+GC[g]+'"></i></span><span class="sc">'+f1(sc.tr[i])+' '+lvl(sc.tr[i])+'</span></div>'}).join('')}).join('');
   var html='<h2>'+(name?esc(name)+' 님의 ':'')+'결과</h2><p class="lead">지점 '+esc(P.br||'없음')+', 응답일 '+esc(P.d||'-')+', 생년월일 '+esc(P.b||'-')+', 연락처 '+esc(P.p||'-')+', 성별 '+esc(P.s||'-')+'</p>'
    +(sc.fake>=3?'<div class="flag">좋게 보이려는 쪽으로 답한 문장이 많습니다. 결과가 실제보다 좋게 나왔을 수 있으니 면담에서 다시 확인하세요.</div>':'')
-   +'<div class="hero"><span class="tag">영업성향</span><p class="type">'+st.n+'</p><p class="kw">'+st.k+'</p><p>'+st.t+'</p></div><div class="desc"><h4>'+st.n+'과 면담할 때</h4><p><b>강점</b> '+COACH[sc.st][0]+'</p><p><b>개발 영역</b> '+COACH[sc.st][1]+'</p></div>'
+   +'<div class="hero" style="background:'+PC[sc.st]+';color:'+PT[sc.st]+'"><span class="tag">영업성향</span><p class="type">'+st.n+'</p><p class="ani">'+AN[sc.st][0]+', '+AN[sc.st][2]+'</p><span class="big" aria-hidden="true">'+AN[sc.st][1]+'</span><p class="kw">'+st.k+'</p><p>'+st.t+'</p></div><div class="desc"><h4>'+st.n+'과 면담할 때</h4><p><b>강점</b> '+COACH[sc.st][0]+'</p><p><b>개발 영역</b> '+COACH[sc.st][1]+'</p></div>'
    +'<div class="grp">'+['D','A','I'].map(function(g){return '<div><b style="color:'+GC[g]+'">'+f1(sc.gm[g])+'</b><span>'+GN[g]+' 묶음</span></div>'}).join('')+'</div>'
    +'<h3>14개 성향 점수 (1.0 ~ 5.0)</h3><div class="bars">'+bars+'</div>'
    +'<div class="lg">'+['D','A','I'].map(function(g){return '<span><i style="background:'+GC[g]+'"></i>'+GN[g]+'</span>'}).join('')+'<span>3.75 이상 높음, 2.75 이하 낮음</span></div>'
@@ -494,7 +503,7 @@ function render(sc,P){
   
   
   var txt='[퍼스널 프로파일 문장형 결과]\n이름: '+name+'\n응답일: '+(P.d||'')+'\n생년월일: '+(P.b||'')+'\n연락처: '+(P.p||'')+'\n성별: '+(P.s||'')
-    +'\n지점: '+(P.br||'')+'\n영업성향: '+st.n+'\n강점: '+COACH[sc.st][0]+'\n개발 영역: '+COACH[sc.st][1]+'\n묶음 평균: 역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인관계 '+f1(sc.gm.I)
+    +'\n지점: '+(P.br||'')+'\n영업성향: '+st.n+' ('+AN[sc.st][0]+')\n강점: '+COACH[sc.st][0]+'\n개발 영역: '+COACH[sc.st][1]+'\n묶음 평균: 역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인관계 '+f1(sc.gm.I)
     +'\n'+T.map(function(x,i){return x.k+' '+f1(sc.tr[i])+' '+lvl(sc.tr[i])}).join('\n')
     +'\n높은 두 가지: '+top.map(function(i){return T[i].k}).join(', ')+'\n낮은 두 가지: '+bot.map(function(i){return T[i].k}).join(', ')
     +'\n확인용 문장 4개 중 그렇다 이상: '+sc.fake+'개'+(sc.fake>=3?' (좋게 보이려는 답 주의)':'');

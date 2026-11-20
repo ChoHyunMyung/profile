@@ -1,5 +1,5 @@
 // 한 번 열면 인터넷 없이도 열리게 저장해 둔다. 인터넷이 되면 새 판을 먼저 받는다.
-const C='pp-app-v3', SHELL=['./','index.html','manifest.webmanifest','icon-180.png','icon-512.png'];
+const C='pp-app-v5', SHELL=['./','index.html','manifest.webmanifest','icon-180.png','icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{

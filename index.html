@@ -8,12 +8,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="프로파일">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#008CD8">
+<meta name="theme-color" content="#F2F4F7">
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-180.png">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
 <style>
 /* 부산7본부 퍼스널 프로파일. MetLife 파랑과 초록, Pretendard 한 가지 글꼴.
    표지와 마침 화면은 파란 바탕, 문항은 흰 종이 한 장에 줄로 나눔, 답은 선 위의 동그라미 다섯 개 */
@@ -178,6 +179,107 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
 .seven div{border-left:0}
 @media (max-width:520px){ .hero .big{width:120px;height:120px;top:8px;transform:none} .hero{min-height:0} .hero .type{max-width:calc(100% - 110px)} }
 
+
+/* ───── 입체감: 메트라이프 홈페이지 문법 ─────
+   겹쳐 놓은 판(그림 판 위에 짙은 그라데이션 판), 비스듬한 면, 파랑에서 초록으로 가는 선, 8px 모서리, Noto Sans KR */
+:root{
+  --font:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --bg:#F2F4F7; --ml-blue:#007ABC; --ml-navy:#00294D; --ml-line:linear-gradient(93deg,#0090DA 0,#A4CE4E 104%);
+  --lift:0 1px 2px rgba(0,41,77,.08),0 12px 28px rgba(0,41,77,.12);
+  --lift-hi:0 2px 4px rgba(0,41,77,.12),0 22px 44px rgba(0,41,77,.22);
+}
+body{background:var(--bg)}
+body[data-v="home"],body[data-v="done"]{background:var(--bg);color:var(--fg)}
+h1{font-weight:700;letter-spacing:-.02em}
+
+/* 표지: 그림 판과 글 판을 어긋나게 겹침 */
+.home{justify-content:center;padding:28px 0}
+.stage{position:relative;margin:0 0 0 12%;background:#008CD8;border-radius:8px;box-shadow:var(--lift-hi);overflow:hidden}
+.stage::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(136deg,rgba(255,255,255,.16) 0 22%,transparent 22%),
+  linear-gradient(316deg,rgba(0,41,77,.28) 0 18%,transparent 18%);pointer-events:none}
+.cover{display:block;width:100%;max-width:none;height:auto;margin:0}
+.panel{position:relative;z-index:1;margin:-76px 10% 0 0;padding:34px 36px 36px;border-radius:8px;color:#fff;overflow:hidden;
+  background:linear-gradient(118deg,#00294D 0%,#00508A 46%,#007ABC 100%);box-shadow:var(--lift-hi)}
+.panel::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(128deg,transparent 0 58%,rgba(0,144,218,.38) 58% 78%,transparent 78%),
+  linear-gradient(52deg,transparent 0 70%,rgba(164,206,78,.30) 70%)}
+.panel::after{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--ml-line)}
+.panel > *{position:relative;z-index:1}
+.home .panel h1{font-size:clamp(2.1rem,5.6vw,3rem);font-weight:700;line-height:1.18;letter-spacing:-.03em;margin:0 0 12px}
+.home .panel .lead{color:#fff;opacity:.88;font-size:1.05rem;margin:0}
+.home .panel .btn{background:#fff;background-image:none;color:var(--ml-navy);margin-top:28px;box-shadow:0 3px 0 rgba(0,0,0,.25),0 14px 26px rgba(0,0,0,.28)}
+.home .link{color:var(--muted);opacity:1;margin-top:22px}
+.home .note{color:var(--muted);opacity:1;margin-top:10px;text-align:center}
+.home .card.panel{margin:0;padding:44px 40px}
+.home .card.panel h2{font-weight:700}
+.home .btn.ghost{background:#fff;color:var(--ml-navy);border:0;margin-top:26px}
+
+/* 단추: 눌리는 느낌 */
+.btn{border-radius:8px;font-weight:700;background:linear-gradient(180deg,#1A9FE6 0%,#007ABC 100%);
+  box-shadow:0 3px 0 #005A8C,0 12px 24px rgba(0,122,188,.30);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 #005A8C,0 4px 10px rgba(0,122,188,.25)}
+.btn.ghost{background:#fff;color:var(--ml-navy);border:0;box-shadow:0 2px 0 #C9D4DF,0 8px 18px rgba(0,41,77,.10)}
+.btn.ghost:active{box-shadow:0 0 0 #C9D4DF,0 3px 8px rgba(0,41,77,.10)}
+.btn.danger{background:#fff;border:0;color:var(--warn);box-shadow:0 2px 0 #E7B8AF,0 8px 18px rgba(200,55,31,.12)}
+
+/* 종이: 떠 있는 판, 위에 파랑-초록 선 */
+#items,.fields,.bars,.seven,#imp{position:relative;border-radius:10px;box-shadow:var(--lift);overflow:hidden}
+#items::before,.fields::before,.bars::before,.seven::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--ml-line)}
+#items{padding-top:12px}
+.fields{padding-top:30px}
+.bars{padding-top:16px}
+.seven{padding-top:22px}
+.fields input,.fields select,.sel,.pin,textarea.code,textarea.fb{border-radius:8px;box-shadow:inset 0 2px 3px rgba(0,41,77,.07)}
+.rule{background:#fff;border-left:5px solid var(--green);border-radius:0 8px 8px 0;padding:16px 20px;box-shadow:var(--lift)}
+
+/* 진행 막대 */
+.sticky{background:linear-gradient(180deg,var(--bg) 78%,rgba(242,244,247,0))}
+.bar{height:12px;border-radius:6px;background:#DDE4EC;box-shadow:inset 0 2px 3px rgba(0,41,77,.18)}
+.bar i{border-radius:6px;background:var(--ml-line);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.12)}
+
+/* 답 동그라미: 볼록한 단추 */
+.opts::before{height:6px;margin-top:-3px;border-radius:3px;background:#E3E9F0;box-shadow:inset 0 2px 2px rgba(0,41,77,.15)}
+.opts label{border:0;background:linear-gradient(180deg,#FFFFFF 0%,#EAF0F6 100%);
+  box-shadow:0 3px 0 #C3D0DD,0 8px 14px rgba(0,41,77,.14),inset 0 1px 0 #fff}
+.opts label:active{transform:translateY(2px);box-shadow:0 1px 0 #C3D0DD,0 3px 6px rgba(0,41,77,.14)}
+.opts label:has(input:checked){background:linear-gradient(180deg,#22A9F0 0%,#007ABC 100%);
+  box-shadow:0 3px 0 #005A8C,0 10px 18px rgba(0,122,188,.42),inset 0 1px 0 rgba(255,255,255,.45);transform:translateY(-2px) scale(1.14)}
+.item.err .opts label{box-shadow:0 0 0 2px var(--warn),0 3px 0 #C3D0DD}
+
+/* 지점장 화면 */
+.chip{border-radius:8px;border:0;box-shadow:0 2px 0 #C9D4DF,0 6px 14px rgba(0,41,77,.08)}
+.chip.on{background:linear-gradient(180deg,#0A4C8B,#00294D);box-shadow:0 2px 0 #001628,0 8px 18px rgba(0,41,77,.30)}
+.seven .th{border-radius:12px;box-shadow:0 3px 0 rgba(0,0,0,.14),0 10px 18px rgba(0,41,77,.20)}
+.gh .gi{border-radius:8px;box-shadow:0 2px 0 rgba(0,0,0,.14),0 6px 12px rgba(0,41,77,.18)}
+.row{border-radius:10px;box-shadow:var(--lift);padding-left:20px;transition:transform .08s}
+.row:active{transform:translateY(2px)}
+
+/* 개인 결과: 색 판 위에 비스듬한 면, 동물 그림은 판 밖으로 살짝 나오게 */
+.hero{border-radius:10px;overflow:visible;box-shadow:var(--lift-hi);margin-top:26px}
+.hero::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:
+  linear-gradient(136deg,rgba(255,255,255,.20) 0 16%,transparent 16%),
+  linear-gradient(316deg,rgba(0,0,0,.16) 0 30%,transparent 30%)}
+.hero > *{position:relative;z-index:1}
+.hero .big{position:absolute;z-index:2;right:22px;top:-18px;transform:rotate(3deg);width:200px;height:200px;border-radius:14px;
+  border:5px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.18),0 20px 36px rgba(0,0,0,.34)}
+.hero p{max-width:calc(100% - 230px)}
+.hero + .desc{border-radius:10px;box-shadow:var(--lift)}
+.grp div{border-radius:10px;box-shadow:var(--lift)}
+.brow .tr{height:14px;border-radius:7px;background:#E3E9F0;box-shadow:inset 0 2px 3px rgba(0,41,77,.18)}
+.brow .tr i{border-radius:7px;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -3px 0 rgba(0,0,0,.16)}
+.desc{border-left-width:5px;border-image:var(--ml-line) 1}
+.hero + .desc{border-image:none}
+.flag{border-radius:8px;box-shadow:var(--lift)}
+
+@media (max-width:520px){
+  .stage{margin-left:6%}
+  .panel{margin:-40px 4% 0 0;padding:26px 22px 28px}
+  .hero .big{width:110px;height:110px;right:12px;top:-14px;border-width:4px}
+  .hero p{max-width:100%}
+  .hero .type{max-width:calc(100% - 120px)}
+}
+
 </style>
 </head>
 <body>
@@ -198,10 +300,12 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
   </section>
 
   <section id="v-home" class="home" hidden>
-    <img class="cover" src="cover.png" alt="" width="1024" height="688">
+    <div class="stage"><img class="cover" src="cover.png" alt="" width="1024" height="688"></div>
+    <div class="panel">
     <h1>부산7본부<br>퍼스널 프로파일 검사</h1>
     <p class="lead">MetLife 부산7본부 후보자용. 문장 60개, 약 10분.</p>
     <button class="btn" id="b-start">검사 시작</button>
+    </div>
     <button class="link" id="b-admin">결과 보기 (지점장)</button>
     <p class="note">보험업법상 보험설계사를 모집하는 것으로 정규 또는 비정규 직원 채용과는 무관합니다.</p>
   </section>
@@ -224,7 +328,7 @@ textarea.code,textarea.fb{font-size:.9rem;line-height:1.5;word-break:break-all;m
   </section>
 
   <section id="v-done" class="home" hidden>
-    <div class="card">
+    <div class="card panel">
       <h2>응답이 끝났습니다</h2>
       <p>수고하셨습니다. 결과는 이 화면에 나오지 않습니다. 지점장이 확인한 뒤 설명해 드립니다.</p>
       <p>아이패드를 지점장에게 돌려주세요.</p>
@@ -457,7 +561,7 @@ function showList(){
     if(!by[k].length)return;
     var h=document.createElement('h3');h.className='gh';h.innerHTML=pic(k,'gi')+'<span>'+STYLE[k].n+' ('+AN[k][0]+') '+by[k].length+'명</span>';box.appendChild(h);
     by[k].forEach(function(o){
-      var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';b.style.boxShadow='inset 8px 0 0 '+PC[k];
+      var P=o.P, sc=o.sc, b=document.createElement('button');b.className='row';b.style.borderLeft='8px solid '+PC[k];
       b.innerHTML='<b>'+esc(P.n||'이름 없음')+'</b><em>역동 '+f1(sc.gm.D)+' / 분석 '+f1(sc.gm.A)+' / 대인 '+f1(sc.gm.I)+'</em><span>'+esc(BR.indexOf(P.br)>-1?P.br:'지점 없음')+', '+esc(P.d||'')+(P.b?', '+esc(P.b):'')+(sc.fake>=3?', 확인용 문장 주의':'')+'</span>';
       b.addEventListener('click',function(){cur=P;render(sc,P);show('detail')});
       box.appendChild(b);

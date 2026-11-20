@@ -280,6 +280,52 @@ h1{font-weight:700;letter-spacing:-.02em}
   .hero .type{max-width:calc(100% - 120px)}
 }
 
+
+/* ───── 동물은 작은 아이콘, 볼록 튀어나온 단추처럼 ───── */
+:root{--gd:#F70201;--ga:#019F50;--gi:#011C59}
+
+/* 아이콘 하나: 색 타일에 두께(아래 짙은 띠), 바닥 그림자, 위쪽 광택 */
+.ic{--c:#0090DA;--d:color-mix(in srgb,var(--c) 62%,#000);position:relative;display:inline-block;flex:none;
+  width:36px;height:36px;border-radius:26%;background:var(--c);overflow:visible;vertical-align:middle;
+  box-shadow:0 4px 0 var(--d),0 9px 12px rgba(0,20,45,.34),0 0 0 1px rgba(255,255,255,.22) inset;transform:translateY(-2px)}
+.ic img{display:block;width:100%;height:100%;border-radius:inherit}
+.ic::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:linear-gradient(180deg,rgba(255,255,255,.50) 0%,rgba(255,255,255,.12) 38%,rgba(255,255,255,0) 52%,rgba(0,0,0,.16) 100%)}
+.ic::after{content:"";position:absolute;left:12%;right:12%;top:6%;height:26%;border-radius:50%;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.60),rgba(255,255,255,0) 70%)}
+
+/* 표지: 그림 대신 메트라이프식 면 구성, 동물은 글 판 위쪽에 작은 줄로 */
+.stage{height:clamp(200px,34vw,270px);background:linear-gradient(120deg,#0061A0 0%,#0090DA 62%,#35A9E6 100%)}
+.stage::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 100% 0,rgba(164,206,78,.55) 0 150px,transparent 151px),
+  radial-gradient(circle at 78% 100%,rgba(0,41,77,.35) 0 190px,transparent 191px),
+  radial-gradient(circle at 56% 0,rgba(255,255,255,.14) 0 120px,transparent 121px)}
+.mini{display:flex;gap:12px;margin:0 0 26px}
+.mini .ic{width:34px;height:34px}
+
+/* 지점장 화면 */
+.seven{padding-top:28px}
+.seven .th{display:block;width:38px;height:38px;max-width:none;aspect-ratio:auto;margin:0 auto 16px;border-radius:26%;
+  box-shadow:0 4px 0 var(--d),0 9px 12px rgba(0,20,45,.30),0 0 0 1px rgba(255,255,255,.22) inset}
+.seven .zero .th{opacity:.3}
+.gh{gap:12px}
+.gh .gi{width:28px;height:28px;border-radius:26%;box-shadow:0 3px 0 var(--d),0 6px 9px rgba(0,20,45,.28),0 0 0 1px rgba(255,255,255,.22) inset}
+
+/* 개인 결과: 판 오른쪽 위에 아이콘 하나, 판보다 살짝 밝게 떠 있음 */
+.hero{min-height:0;margin-top:0}
+.hero .big{position:absolute;z-index:2;right:26px;top:24px;width:64px;height:64px;transform:translateY(-3px);border:0;opacity:1;
+  --d:color-mix(in srgb,var(--c) 55%,#000);
+  box-shadow:0 6px 0 var(--d),0 16px 22px rgba(0,0,0,.38),0 0 0 2px rgba(255,255,255,.55)}
+.hero p{max-width:calc(100% - 100px)}
+@media (max-width:520px){
+  .hero .big{width:48px;height:48px;right:16px;top:16px}
+  .hero .type{max-width:calc(100% - 66px)}
+  .hero p{max-width:100%}
+  .mini{gap:9px}
+  .mini .ic{width:28px;height:28px}
+  .seven .th{width:32px;height:32px}
+}
+
 </style>
 </head>
 <body>
@@ -300,8 +346,9 @@ h1{font-weight:700;letter-spacing:-.02em}
   </section>
 
   <section id="v-home" class="home" hidden>
-    <div class="stage"><img class="cover" src="cover.png" alt="" width="1024" height="688"></div>
+    <div class="stage" aria-hidden="true"></div>
     <div class="panel">
+    <div class="mini" aria-hidden="true"><span class="ic" style="--c:#F70201"><img src="i-D.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#FBAD02"><img src="i-DI.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#FEF905"><img src="i-DA.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#019F50"><img src="i-A.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#0163BD"><img src="i-AI.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#011C59"><img src="i-I.png" alt="" width="128" height="128"></span><span class="ic" style="--c:#79269A"><img src="i-C.png" alt="" width="128" height="128"></span></div>
     <h1>부산7본부<br>퍼스널 프로파일 검사</h1>
     <p class="lead">MetLife 부산7본부 후보자용. 문장 60개, 약 10분.</p>
     <button class="btn" id="b-start">검사 시작</button>
@@ -441,8 +488,8 @@ function f1(v){return v.toFixed(1)}
 
 // PSP 영업성향 7가지 순서와 면담용 요약 [강점, 개발 영역]
 var ORDER=['D','DI','DA','A','AI','I','C'];
-var PC={D:'#FB0201',DI:'#FDB904',DA:'#FEFB08',A:'#01A651',AI:'#006BC0',I:'#011E60',C:'#772C9F'};
-function pic(k,c){return '<img class="'+c+'" src="a-'+k+'.png" alt="" width="512" height="512">'}
+var PC={D:'#F70201',DI:'#FBAD02',DA:'#FEF905',A:'#019F50',AI:'#0163BD',I:'#011C59',C:'#79269A'};
+function pic(k,c){return '<span class="ic '+c+'" style="--c:'+PC[k]+'"><img src="i-'+k+'.png" alt="" width="128" height="128"></span>'}
 var AN={D:['치타','🐆','Dynamic'],DI:['말','🐎','Dynamic-Interpersonal'],DA:['독수리','🦅','Dynamic-Analytic'],A:['올빼미','🦉','Analytic'],AI:['코끼리','🐘','Analytic-Interpersonal'],I:['돌고래','🐬','Interpersonal'],C:['용','🐉','Collaborative']};
 var PT={D:'#fff',DI:'#0B2A4A',DA:'#0B2A4A',A:'#fff',AI:'#fff',I:'#fff',C:'#fff'};
 var COACH={

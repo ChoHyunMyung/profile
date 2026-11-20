@@ -456,6 +456,11 @@ label.f{font-size:.78rem;letter-spacing:.5px;color:var(--muted);font-weight:700}
 .gds .gd{margin:0;border-left:0;border-top:6px solid var(--gold)}
 @media (max-width:620px){.gds{grid-template-columns:1fr}}
 
+.gd.ask{border-left-color:var(--gold);background:#FFFBF2}
+.gd.ask ul{list-style:none;padding-left:0}
+.gd.ask li{position:relative;padding:10px 14px 10px 44px;margin:8px 0;background:#fff;border-radius:10px;font-weight:700;box-shadow:0 1px 2px rgba(14,26,51,.08),0 4px 10px rgba(14,26,51,.06)}
+.gd.ask li::before{content:"Q";position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--navy);color:var(--gold);font-size:.78rem;font-weight:900;display:grid;place-items:center}
+
 </style>
 </head>
 <body>
@@ -693,20 +698,37 @@ C:{
  m3:["성향이 다른 선배 여럿을 만나게 합니다.","본인과 닮은 사람을 찾게 합니다."],
  warn:["뚜렷한 쪽이 없어 어느 말이 통했는지 알기 어렵습니다. 중간중간 '어떤 부분이 와닿으세요'를 묻습니다.","'나중에 하시죠'로 미루면 관심이 식습니다. 기한을 정합니다.","14개 성향 점수에서 높은 두 가지와 낮은 두 가지를 같이 봅니다.","방향이 자주 바뀔 수 있습니다. 정한 것을 글로 남깁니다."]}
 };
+// 하면 좋은 질문. c 고객에게(FSR용), f 후보자에게(FM용)
+var QS={
+D:{c:["지금 가장 먼저 해결하고 싶은 것 한 가지가 무엇입니까?","보장, 보험료, 기간 가운데 무엇이 가장 중요하십니까?","두 가지 안 가운데 어느 쪽이 더 맞습니까?","오늘 정한다면 걸리는 것이 무엇입니까?"],
+   f:["3년 뒤에 어느 자리에 있고 싶으십니까?","지금 하시는 일에서 가장 답답한 것이 무엇입니까?","소득 목표를 숫자로 말하면 얼마입니까?","결정하는 데 더 필요한 것이 무엇입니까?"]},
+DI:{c:["이 보장으로 가장 지켜 주고 싶은 분이 누구입니까?","가족들은 이 부분을 어떻게 생각하십니까?","주변에 비슷한 고민을 하는 분이 계십니까?","언제까지 정하면 마음이 편하시겠습니까?"],
+   f:["지금까지 함께 일하면서 가장 좋았던 팀은 어떤 팀이었습니까?","주변 분들은 선생님을 어떤 사람이라고 합니까?","사람을 도와서 보람 있었던 일이 있습니까?","함께 시작해 보고 싶은 분이 있습니까?"]},
+DA:{c:["지금 가진 보장에서 숫자로 부족한 부분이 어디라고 보십니까?","비교할 때 어떤 기준을 가장 먼저 보십니까?","더 확인하고 싶은 자료가 무엇입니까?","어떤 조건이면 결정하실 수 있습니까?"],
+   f:["직업을 고를 때 어떤 기준으로 판단하십니까?","목표 소득에서 거꾸로 계산해 보신 적이 있습니까?","이 일에서 가장 따져 보고 싶은 부분이 무엇입니까?","사람을 새로 만나는 일은 어떻게 생각하십니까?"]},
+A:{c:["자료를 보시고 궁금했던 점이 무엇입니까?","지금 가입한 보험에서 확인하고 싶은 부분이 있습니까?","결정 전에 더 알아보고 싶은 것이 무엇입니까?","언제쯤 다시 뵈면 좋겠습니까?"],
+   f:["이 일에 대해 가장 걱정되는 점이 무엇입니까?","어떤 정보가 있으면 판단하기 쉽겠습니까?","지금 하시는 일에서 가장 잘하는 부분이 무엇입니까?","언제까지 생각해 보고 답을 주실 수 있습니까?"]},
+AI:{c:["가족 가운데 가장 마음이 쓰이는 분이 누구입니까?","걱정되는 점이 있으면 편하게 말씀해 주시겠습니까?","가족과 상의하실 때 제가 도울 것이 있습니까?","계약 뒤에 어떤 관리를 받고 싶으십니까?"],
+   f:["새 일을 시작할 때 가장 필요한 도움이 무엇입니까?","가족은 이 일을 어떻게 생각하십니까?","오래 일한다면 어떤 모습이고 싶으십니까?","지금 망설여지는 부분이 무엇입니까?"]},
+I:{c:["요즘 가족들은 어떻게 지내십니까?","보험 하면 떠오르는 경험이 있으십니까?","지금까지 들으신 것 가운데 어떤 부분이 마음에 남으십니까?","제가 한 번 정리해 드려도 되겠습니까?"],
+   f:["일하면서 가장 즐거웠던 때가 언제였습니까?","어떤 사람들과 일할 때 힘이 나십니까?","주변에서 고민을 자주 털어놓는 편입니까?","다음에 선배 한 분을 같이 만나 보시겠습니까?"]},
+C:{c:["여러 가지 가운데 어느 부분이 가장 와닿으십니까?","숫자로 보는 것과 사례로 듣는 것 가운데 어느 쪽이 편하십니까?","지금 바로 설계를 한번 보시겠습니까?","언제까지 정하면 좋겠습니까?"],
+   f:["오늘 들은 것 가운데 어떤 부분이 가장 궁금하십니까?","일을 고를 때 가장 중요한 것 한 가지가 무엇입니까?","직접 한번 해 보고 싶은 것이 있습니까?","다음 만남은 언제가 좋겠습니까?"]}
+};
 function guide(st,k){
-  var G=GUIDE[st],h='';
+  var G=GUIDE[st],Q=QS[st],n=STYLE[st].n,h='';
   function card(t,arr,c){return '<div class="gd'+(c?' '+c:'')+'"><h4>'+t+'</h4><ul>'+arr.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div>'}
-  if(k!=='후보자') h+='<h3>고객 상담 방향</h3>'+card('상담은 이렇게',G.cust);
-  if(k!=='고객') h+='<h3>후보자 MCS 방향</h3><div class="gds">'+card('MCS OT',G.ot)+card('MCS 1 비전',G.m1)+card('MCS 2 시스템',G.m2)+card('MCS 3 문화',G.m3)+'</div>';
-  h+='<h3>주의할 것</h3>'+card(STYLE[st].n+'을 만날 때',G.warn,'warn');
+  if(k!=='후보자') h+='<h3>FSR용 고객 상담 가이드</h3>'+card('상담은 이렇게',G.cust)+card(n+' 고객에게 하면 좋은 질문',Q.c,'ask');
+  if(k!=='고객') h+='<h3>FM용 후보자 면담 가이드</h3><div class="gds">'+card('MCS OT',G.ot)+card('MCS 1 비전',G.m1)+card('MCS 2 시스템',G.m2)+card('MCS 3 문화',G.m3)+'</div>'+card(n+' 후보자에게 하면 좋은 질문',Q.f,'ask');
+  h+='<h3>주의할 점</h3>'+card(n+'을 만날 때',G.warn,'warn');
   return h;
 }
 function guideTxt(st,k){
-  var G=GUIDE[st],t='';
+  var G=GUIDE[st],Q=QS[st],t='';
   function sec(n,arr){return '\n['+n+']\n'+arr.map(function(x){return '- '+x}).join('\n')}
-  if(k!=='후보자') t+=sec('고객 상담 방향',G.cust);
-  if(k!=='고객') t+=sec('MCS OT',G.ot)+sec('MCS 1 비전',G.m1)+sec('MCS 2 시스템',G.m2)+sec('MCS 3 문화',G.m3);
-  t+=sec('주의할 것',G.warn);
+  if(k!=='후보자') t+=sec('고객 상담 방향',G.cust)+sec('고객에게 하면 좋은 질문',Q.c);
+  if(k!=='고객') t+=sec('MCS OT',G.ot)+sec('MCS 1 비전',G.m1)+sec('MCS 2 시스템',G.m2)+sec('MCS 3 문화',G.m3)+sec('후보자에게 하면 좋은 질문',Q.f);
+  t+=sec('주의할 점',G.warn);
   return t;
 }
 
@@ -867,7 +889,7 @@ function render(sc,P){
    +'<h3>가장 높게 나온 두 가지</h3>'+top.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].hi+'</p></div>'}).join('')
    +'<h3>가장 낮게 나온 두 가지</h3>'+bot.map(function(i){return '<div class="desc"><h4>'+T[i].k+' '+f1(sc.tr[i])+'</h4><p>'+T[i].lo+'</p><p class="act">해 볼 것: '+T[i].act+'</p></div>'}).join('')
    +'<button class="btn" id="cp">결과 복사하기</button><button class="btn ghost" id="rt">목록으로</button>'
-   +'<p class="note">PSP(Personality Styles Profile)를 본떠 부산7본부에서 직접 만든 참고용 검사입니다. 본사 정식 PSP 진단과는 문항이 달라 결과가 같지 않을 수 있습니다. 상담과 MCS 방향, 주의할 것은 성향 설명을 바탕으로 정리한 참고 내용입니다. 사람을 한 가지 유형으로 단정하지 않습니다.</p>';
+   +'<p class="note">PSP(Personality Styles Profile)를 본떠 부산7본부에서 직접 만든 참고용 검사입니다. 본사 정식 PSP 진단과는 문항이 달라 결과가 같지 않을 수 있습니다. 상담과 MCS 방향, 질문, 주의할 점은 성향 설명을 바탕으로 정리한 참고 내용입니다. 사람을 한 가지 유형으로 단정하지 않습니다.</p>';
   var r=document.getElementById('res');r.innerHTML=html;r.hidden=false;
   
   
